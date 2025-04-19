@@ -33,7 +33,7 @@ select * from [テーブル名];
 truncate table [テーブル名];
 
 ## dbテスト
-# テストデータの登録
+# ユーザーの登録
 curl -X POST http://localhost:8080/register \
 -H "Content-Type: application/json" \
 -d '{
@@ -41,7 +41,7 @@ curl -X POST http://localhost:8080/register \
 	"password": "password123"
 }'
 
-# ログイン確認
+# ログイン
 curl -X POST http://localhost:8080/login \
 -H "Content-Type: application/json" \
 -d '{
@@ -52,7 +52,7 @@ curl -X POST http://localhost:8080/login \
 # ポストの登録
 curl -X POST http://localhost:8080/posts/ \
 -H "Content-Type: application/json" \
--H "Session-ID: da3105ad-1fd7-46d4-92ec-ca8a99d2ab6a" \
+-H "Session-ID: [ログイン確認時に返ってきたセッションID]" \
 -d '{
 	"title": "テスト投稿",
 	"content": "これはテスト投稿の内容です"
