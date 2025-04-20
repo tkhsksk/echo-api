@@ -11,3 +11,9 @@ type User struct {
 	Status    string    `gorm:"default:active"` // active / suspended など
 	CreatedAt time.Time
 }
+
+type UserResponse struct {
+	ID     uint   `json:"id"`
+	Email  string `json:"email"`
+	Status string `json:"status"`
+}

@@ -10,11 +10,12 @@ CREATE DATABASE IF NOT EXISTS [データベース名] DEFAULT CHARACTER SET utf8
 
 
 # モジュールを一括導入
-cd /your/project/directory
+cd /path/to/your-project-directory
 go mod tidy
 
 # .env.sampleファイルを元に.envファイルの作成
-cp .env.sample .envZ
+cp .env.sample .env
+vi .env
 
 # echoの実行
 go run main.go
@@ -32,25 +33,25 @@ select * from [テーブル名];
 # テーブル内のデータを削除
 truncate table [テーブル名];
 
-## dbテスト
+## apiテスト
 # ユーザーの登録
-curl -X POST http://localhost:8080/register \
+curl -X POST http://localhost:4207/register \
 -H "Content-Type: application/json" \
 -d '{
-	"email": "testuser@example.com",
+	"email": "user@example.com",
 	"password": "password123"
 }'
 
 # ログイン
-curl -X POST http://localhost:8080/login \
+curl -X POST http://localhost:4207/login \
 -H "Content-Type: application/json" \
 -d '{
-    "email": "testuser@example.com",
+    "email": "user@example.com",
     "password": "password123"
 }'
 
 # ポストの登録
-curl -X POST http://localhost:8080/posts/ \
+curl -X POST http://localhost:4207/posts/ \
 -H "Content-Type: application/json" \
 -H "Session-ID: [ログイン確認時に返ってきたセッションID]" \
 -d '{

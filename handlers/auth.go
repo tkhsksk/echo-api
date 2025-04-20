@@ -64,7 +64,7 @@ func Login(c echo.Context) error {
 	session := models.Session{
 		ID:        uuid.New().String(),
 		UserID:    user.ID,
-		ExpiresAt: time.Now().Add(24 * time.Hour), // 1日有効
+		ExpiresAt: time.Now().Add(3 * time.Hour), // 3時間有効
 	}
 
 	if err := db.DB.Create(&session).Error; err != nil {

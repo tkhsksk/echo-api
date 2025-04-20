@@ -22,9 +22,12 @@ func main() {
 	e.POST("/register", handlers.Register)
 	e.POST("/login", handlers.Login)
 
+	e.GET("/users", handlers.GetUsers)       // 一覧取得
+	e.GET("/users/:id", handlers.GetUserByID) // 個別取得
+
 	// 認証が必要なAPIにミドルウェアを適用
 	r := e.Group("/posts", middlewares.IsAuthenticated)
 	r.POST("/", handlers.CreatePost)
 
-	e.Start(":8080")
+	e.Start(":4207")
 }
