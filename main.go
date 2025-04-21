@@ -39,6 +39,7 @@ func main() {
     })
 
     // 画像登録
+    e.File("/myfont.ttf", "static/myfont.ttf")
     e.File("/favicon.ico", "static/favicon.ico")
     e.File("/logo.svg", "static/logo.svg")
     e.File("/logo-dark.svg", "static/logo-dark.svg")
