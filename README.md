@@ -73,7 +73,10 @@ curl -X POST http://localhost:4207/posts/ \
 	"content": "これはテスト投稿の内容です"
 }'
 ```
+
 # ユーザーの登録
+
+```bash
 curl -X POST http://localhost:4207/register \
 -H "Content-Type: application/json" \
 -d '{
@@ -97,3 +100,4 @@ curl -X POST http://localhost:4207/posts/ \
 	"title": "テスト投稿",
 	"content": "これはテスト投稿の内容です"
 }'
+```
