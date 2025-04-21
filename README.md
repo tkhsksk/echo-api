@@ -73,31 +73,3 @@ curl -X POST http://localhost:4207/posts/ \
 	"content": "これはテスト投稿の内容です"
 }'
 ```
-
-# ユーザーの登録
-
-```bash
-curl -X POST http://localhost:4207/register \
--H "Content-Type: application/json" \
--d '{
-	"email": "user@example.com",
-	"password": "password123"
-}'
-
-# ログイン
-curl -X POST http://localhost:4207/login \
--H "Content-Type: application/json" \
--d '{
-    "email": "user@example.com",
-    "password": "password123"
-}'
-
-# ポストの登録
-curl -X POST http://localhost:4207/posts/ \
--H "Content-Type: application/json" \
--H "Session-ID: [ログイン確認時に返ってきたセッションID]" \
--d '{
-	"title": "テスト投稿",
-	"content": "これはテスト投稿の内容です"
-}'
-```
