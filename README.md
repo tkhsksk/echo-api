@@ -21,6 +21,10 @@ vi .env
 # echoの実行
 go run main.go
 
+## 本番起動(myappディレクトリにビルドファイルを)
+go build -o myapp
+./myapp
+
 ## db操作
 
 # dbのデータ確認
