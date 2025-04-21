@@ -7,6 +7,7 @@ go version
 mysql -u root -p
 # パスワードの入力 Enter
 CREATE DATABASE IF NOT EXISTS [データベース名] DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+GRANT ALL PRIVILEGES ON [データベース名].* TO '[ユーザー名]'@'localhost';
 
 
 # モジュールを一括導入
