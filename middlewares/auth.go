@@ -35,6 +35,10 @@ func IsAuthenticated(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, echo.Map{"error": "ユーザー情報が取得できません"})
 		}
 
+		if user.Status != "active" {
+		    return c.JSON(http.StatusForbidden, echo.Map{"error": "ユーザーがアクティブではありません",})
+		}
+
 		// ユーザー情報を次の処理で使えるように設定
 		c.Set("user", user)
 

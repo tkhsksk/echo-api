@@ -51,6 +51,9 @@ func main() {
 	e.GET("/users", handlers.GetUsers)       // 一覧取得
 	e.GET("/users/:id", handlers.GetUserByID) // 個別取得
 
+	e.GET("/sessions", handlers.GetSessions)       // 一覧取得
+	e.GET("/sessions/:id", handlers.GetSessionsByUserID) // 個別一覧取得
+
 	// 認証が必要なAPIにミドルウェアを適用
 	r := e.Group("/posts", middlewares.IsAuthenticated)
 	r.POST("/", handlers.CreatePost)
