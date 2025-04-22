@@ -56,6 +56,10 @@ func Login(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, echo.Map{"error": "ユーザーが見つかりません"})
 	}
 
+	if user.Status != "active" {
+	    return c.JSON(http.StatusForbidden, echo.Map{"error": "ユーザーがアクティブではありません",})
+	}
+
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
 		return c.JSON(http.StatusUnauthorized, echo.Map{"error": "パスワードが間違っています"})
 	}

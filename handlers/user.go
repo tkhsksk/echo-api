@@ -2,25 +2,17 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 
 	"api/db"
 	"api/models"
+	"api/middlewares"
 )
 
 func GetUsers(c echo.Context) error {
-	// デフォルト 100 件
-	limit := 100
-	if l := c.QueryParam("limit"); l != "" {
-		if parsed, err := strconv.Atoi(l); err == nil {
-			limit = parsed
-			if limit > 1000 {
-				limit = 1000 // 上限（DoS対策）
-			}
-		}
-	}
+	// デフォルト 100 件 上限1000（DoS対策）
+	limit := middlewares.ParseLimitParam(c, 100, 1000)
 
 	var users []models.User
 	if err := db.DB.Limit(limit).Find(&users).Error; err != nil {

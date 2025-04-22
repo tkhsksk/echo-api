@@ -11,3 +11,16 @@ type Session struct {
 	ExpiresAt time.Time
 	CreatedAt time.Time
 }
+
+type SessionResponse struct {
+	ID        string `json:"id"`
+	UserID    uint   `json:"userId"`
+	ExpiresAt time.Time `json:"expiresAt"`
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+type SessionUserResponse struct {
+	ID        string `json:"id"`
+	ExpiresAt time.Time `json:"expiresAt"`
+	CreatedAt time.Time `json:"createdAt"`
+}
