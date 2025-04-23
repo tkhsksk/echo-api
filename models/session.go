@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type Session struct {
+type UserSession struct {
 	ID        string    `gorm:"primaryKey"` // UUIDとかで生成
 	UserID    uint      `gorm:"not null"`
 	User      User
@@ -12,15 +12,23 @@ type Session struct {
 	CreatedAt time.Time
 }
 
-type SessionResponse struct {
+type UserSessionResponse struct {
 	ID        string `json:"id"`
 	UserID    uint   `json:"userId"`
-	ExpiresAt time.Time `json:"expiresAt"`
 	CreatedAt time.Time `json:"createdAt"`
+	ExpiresAt time.Time `json:"expiresAt"`
 }
 
-type SessionUserResponse struct {
+type UserSessionResponseByUserID struct {
 	ID        string `json:"id"`
-	ExpiresAt time.Time `json:"expiresAt"`
 	CreatedAt time.Time `json:"createdAt"`
+	ExpiresAt time.Time `json:"expiresAt"`
+}
+
+type AdminSession struct {
+	ID        string    `gorm:"primaryKey"` // UUIDとかで生成
+	AdminID   uint      `gorm:"not null"`
+	Admin     Admin
+	ExpiresAt time.Time
+	CreatedAt time.Time
 }

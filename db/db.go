@@ -41,8 +41,10 @@ func Init() {
 
 	// モデルのマイグレーション（初回起動時などにテーブル自動作成）
 	if err := DB.AutoMigrate(
+		&models.Admin{},
+		&models.AdminSession{},
 		&models.User{},
-		&models.Session{},
+		&models.UserSession{},
 		&models.Post{},
 	); err != nil {
 		log.Fatalf("マイグレーション失敗: %v", err)

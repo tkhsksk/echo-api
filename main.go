@@ -45,18 +45,20 @@ func main() {
     e.File("/logo-dark.svg", "static/logo-dark.svg")
 
 	// ログイン登録用
-	e.POST("/register", handlers.Register)
-	e.POST("/login", handlers.Login)
-
-	e.GET("/users", handlers.GetUsers)       // 一覧取得
-	e.GET("/users/:id", handlers.GetUserByID) // 個別取得
-
-	e.GET("/sessions", handlers.GetSessions)       // 一覧取得
-	e.GET("/sessions/:id", handlers.GetSessionsByUserID) // 個別一覧取得
+	e.POST("/admin/register", handlers.AdminRegister)
+	e.POST("/admin/login", handlers.AdminLogin)
+	e.POST("/user/register", handlers.UserRegister)
+	e.POST("/user/login", handlers.UserLogin)
 
 	// 認証が必要なAPIにミドルウェアを適用
-	r := e.Group("/posts", middlewares.IsAuthenticated)
-	r.POST("/", handlers.CreatePost)
+	userAuthGroup := e.Group("/posts", middlewares.IsAuthenticatedUser)
+	userAuthGroup.POST("", handlers.CreatePost)
+
+	adminAuthGroup := e.Group("/users", middlewares.IsAuthenticatedAdmin)
+	adminAuthGroup.GET("", handlers.GetUsers)        // 一覧取得
+	adminAuthGroup.GET("/:id", handlers.GetUserByID) // 個別取得
+	adminAuthGroup.GET("/sessions", handlers.GetUserSessions) // 一覧取得
+	adminAuthGroup.GET("/sessions/:id", handlers.GetSessionsByUserID) // 個別一覧取得
 
 	e.Start(":4207")
 }

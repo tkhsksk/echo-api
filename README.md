@@ -20,7 +20,10 @@ cp .env.sample .env
 vi .env
 
 # echoの実行
-go run main.go
+go run /path/to/your-project-directory/main.go
+# 自身の環境の場合
+# go run ~/git/echo.api/main.go
+# http://localhost:4207/
 ```
 
 ## 本番起動(myappディレクトリにビルドファイルを)
@@ -48,16 +51,34 @@ truncate table [テーブル名];
 ## apiテスト
 
 ```bash
-# ユーザーの登録
-curl -X POST http://localhost:4207/register \
+# 管理者の登録
+curl -X POST http://localhost:4207/admin/register \
 -H "Content-Type: application/json" \
 -d '{
 	"email": "user@example.com",
 	"password": "password123"
 }'
 
+# ユーザーの登録
+curl -X POST http://localhost:4207/user/register \
+-H "Content-Type: application/json" \
+-d '{
+	"email": "user@example.com",
+	"password": "password123"
+}'
+
+# ユーザーの取得
+curl -X GET http://localhost:4207/users \
+-H "Content-Type: application/json" \
+-H "Session-ID: [ログイン確認時に返ってきた管理者セッションID]"
+
+# セッションの取得
+curl -X GET http://localhost:4207/users/sessions \
+-H "Content-Type: application/json" \
+-H "Session-ID: [ログイン確認時に返ってきた管理者セッションID]"
+
 # ログイン
-curl -X POST http://localhost:4207/login \
+curl -X POST http://localhost:4207/user/login \
 -H "Content-Type: application/json" \
 -d '{
     "email": "user@example.com",
@@ -65,9 +86,9 @@ curl -X POST http://localhost:4207/login \
 }'
 
 # ポストの登録
-curl -X POST http://localhost:4207/posts/ \
+curl -X POST http://localhost:4207/posts \
 -H "Content-Type: application/json" \
--H "Session-ID: [ログイン確認時に返ってきたセッションID]" \
+-H "Session-ID: [ログイン確認時に返ってきたユーザーセッションID]" \
 -d '{
 	"title": "テスト投稿",
 	"content": "これはテスト投稿の内容です"
