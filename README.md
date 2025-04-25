@@ -56,15 +56,15 @@ curl -X POST http://localhost:4207/admin/register \
 -H "Content-Type: application/json" \
 -d '{
 	"email": "user@example.com",
-	"password": "password123"
+	"password": "Password123"
 }'
 
 # ユーザーの登録
 curl -X POST http://localhost:4207/user/register \
 -H "Content-Type: application/json" \
 -d '{
-	"email": "user@example.com",
-	"password": "password123"
+	"email": "aaa",
+	"password": "Password123"
 }'
 
 # ユーザーの取得
@@ -82,7 +82,7 @@ curl -X POST http://localhost:4207/user/login \
 -H "Content-Type: application/json" \
 -d '{
     "email": "user@example.com",
-    "password": "password123"
+    "password": "Password123"
 }'
 
 # ポストの登録
