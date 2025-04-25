@@ -10,6 +10,7 @@ import (
 
 	"api/db"
 	"api/models"
+	"api/middlewares"
 )
 
 // 管理者登録
@@ -22,6 +23,14 @@ func AdminRegister(c echo.Context) error {
 	req := new(Req)
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "無効なリクエストです"})
+	}
+	
+	if !middlewares.ValidateEmail(req.Email) {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": "メール形式が違います"})
+	}
+
+	if !middlewares.ValidatePassword(req.Password) {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": "パスワード形式が違います"})
 	}
 
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -49,6 +58,14 @@ func UserRegister(c echo.Context) error {
 	req := new(Req)
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "無効なリクエストです"})
+	}
+
+	if !middlewares.ValidateEmail(req.Email) {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": "メール形式が違います"})
+	}
+
+	if !middlewares.ValidatePassword(req.Password) {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": "パスワード形式が違います"})
 	}
 
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
