@@ -63,7 +63,7 @@ curl -X POST http://localhost:4207/admin/register \
 curl -X POST http://localhost:4207/user/register \
 -H "Content-Type: application/json" \
 -d '{
-	"email": "aaa",
+	"email": "user@example.com",
 	"password": "Password123"
 }'
 
@@ -77,12 +77,12 @@ curl -X GET http://localhost:4207/users/sessions \
 -H "Content-Type: application/json" \
 -H "Session-ID: [ログイン確認時に返ってきた管理者セッションID]"
 
-# ログイン
-curl -X POST http://localhost:4207/user/login \
+# 管理者ログイン
+curl -X POST http://localhost:4207/admin/login \
 -H "Content-Type: application/json" \
 -d '{
     "email": "user@example.com",
-    "password": "Password123"
+    "password": "password123"
 }'
 
 # ポストの登録
