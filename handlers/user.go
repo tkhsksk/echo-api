@@ -8,15 +8,21 @@ import (
 	"api/db"
 	"api/models"
 	"api/middlewares"
+	"api/messages"
 )
 
 func GetUsers(c echo.Context) error {
 	// デフォルト 100 件 上限1000（DoS対策）
 	limit := middlewares.ParseLimitParam(c, 100, 1000)
 
+	// db接続
 	var users []models.User
-	if err := db.DB.Limit(limit).Find(&users).Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{"error": "ユーザー取得に失敗しました"})
+	result := db.DB.Limit(limit).Find(&users)
+	if err := result.Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2004]})
+	}
+	if result.RowsAffected == 0 {
+	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4000]})
 	}
 
 	// 必要な情報だけをマッピング
@@ -34,9 +40,12 @@ func GetUsers(c echo.Context) error {
 
 func GetUserByID(c echo.Context) error {
 	id := c.Param("id")
+
+	// db接続
 	var user models.User
-	if err := db.DB.First(&user, id).Error; err != nil {
-		return c.JSON(http.StatusNotFound, echo.Map{"error": "ユーザーが見つかりません"})
+	result := db.DB.First(&user, id)
+	if err := result.Error; err != nil {
+		return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4000]})
 	}
 
 	// 必要な情報だけをマッピング

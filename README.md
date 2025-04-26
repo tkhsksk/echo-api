@@ -52,7 +52,7 @@ truncate table [テーブル名];
 
 ```bash
 # 管理者の登録
-curl -X POST http://localhost:4207/admin/register \
+curl -X POST http://localhost:4207/auth/admin/register \
 -H "Content-Type: application/json" \
 -d '{
 	"email": "user@example.com",
@@ -60,37 +60,60 @@ curl -X POST http://localhost:4207/admin/register \
 }'
 
 # ユーザーの登録
-curl -X POST http://localhost:4207/user/register \
+curl -X POST http://localhost:4207/auth/user/register \
 -H "Content-Type: application/json" \
 -d '{
 	"email": "user@example.com",
 	"password": "Password123"
 }'
 
+# 管理者ログイン
+curl -X POST http://localhost:4207/auth/admin/login \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "user@example.com",
+    "password": "Password123"
+}'
+
+# ユーザーログイン
+curl -X POST http://localhost:4207/auth/user/login \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "hoge@example.com",
+    "password": "password123"
+}'
+
 # ユーザーの取得
 curl -X GET http://localhost:4207/users \
 -H "Content-Type: application/json" \
--H "Session-ID: [ログイン確認時に返ってきた管理者セッションID]"
+-H "Session-ID: [管理者セッション]"
+
+# 個別ユーザーの取得
+curl -X GET http://localhost:4207/users/5 \
+-H "Content-Type: application/json" \
+-H "Session-ID: [管理者セッション]"
 
 # セッションの取得
 curl -X GET http://localhost:4207/users/sessions \
 -H "Content-Type: application/json" \
--H "Session-ID: [ログイン確認時に返ってきた管理者セッションID]"
-
-# 管理者ログイン
-curl -X POST http://localhost:4207/admin/login \
--H "Content-Type: application/json" \
--d '{
-    "email": "user@example.com",
-    "password": "password123"
-}'
+-H "Session-ID: [管理者セッション]"
 
 # ポストの登録
 curl -X POST http://localhost:4207/posts \
 -H "Content-Type: application/json" \
--H "Session-ID: [ログイン確認時に返ってきたユーザーセッションID]" \
+-H "Session-ID: [ユーザーセッション]" \
 -d '{
 	"title": "テスト投稿",
 	"content": "これはテスト投稿の内容です"
 }'
+
+# ポストの取得
+curl -X GET http://localhost:4207/posts \
+-H "Content-Type: application/json" \
+-H "Session-ID: [ユーザーセッション]"
+
+# 個別ポストの取得
+curl -X GET http://localhost:4207/posts/1 \
+-H "Content-Type: application/json" \
+-H "Session-ID: [ユーザーセッション]"
 ```

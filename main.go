@@ -44,15 +44,17 @@ func main() {
     e.File("/logo.svg", "static/logo.svg")
     e.File("/logo-dark.svg", "static/logo-dark.svg")
 
-	// ログイン登録用
-	e.POST("/admin/register", handlers.AdminRegister)
-	e.POST("/admin/login", handlers.AdminLogin)
-	e.POST("/user/register", handlers.UserRegister)
-	e.POST("/user/login", handlers.UserLogin)
+	// 認証関連
+	e.POST("/auth/admin/register", handlers.AdminRegister)
+	e.POST("/auth/admin/login", handlers.AdminLogin)
+	e.POST("/auth/user/register", handlers.UserRegister)
+	e.POST("/auth/user/login", handlers.UserLogin)
 
 	// 認証が必要なAPIにミドルウェアを適用
 	userAuthGroup := e.Group("/posts", middlewares.IsAuthenticatedUser)
-	userAuthGroup.POST("", handlers.CreatePost)
+	userAuthGroup.POST("", handlers.CreatePosts)
+	userAuthGroup.GET("", handlers.GetPosts)        // 一覧取得
+	userAuthGroup.GET("/:id", handlers.GetPostByID)        // 個別取得
 
 	adminAuthGroup := e.Group("/users", middlewares.IsAuthenticatedAdmin)
 	adminAuthGroup.GET("", handlers.GetUsers)        // 一覧取得
