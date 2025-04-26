@@ -12,7 +12,7 @@ import (
 )
 
 // 投稿作成
-func CreatePosts(c echo.Context) error {
+func CreatePost(c echo.Context) error {
 	// ログイン中のユーザー取得
 	user := c.Get("user").(models.User)
 
@@ -85,8 +85,8 @@ func GetPostByID(c echo.Context) error {
 	user := c.Get("user").(models.User)
 
 	// db接続
-	var posts models.Post
-	result := db.DB.Where("user_id = ?", user.ID).Offset(offset).Limit(1).Find(&posts)
+	var post models.Post
+	result := db.DB.Where("user_id = ?", user.ID).Offset(offset).Limit(1).Find(&post)
 	if err := result.Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2004]})
 	}
@@ -97,11 +97,60 @@ func GetPostByID(c echo.Context) error {
 	// 必要な情報だけをマッピング
 	response := models.PostResponse{
 		ID:        uint(idInt),
-		Title:     posts.Title,
-		Content:   posts.Content,
-		CreatedAt: posts.CreatedAt,
-		UpdatedAt: posts.UpdatedAt,
+		Title:     post.Title,
+		Content:   post.Content,
+		CreatedAt: post.CreatedAt,
+		UpdatedAt: post.UpdatedAt,
 	}
 
 	return c.JSON(http.StatusOK, response)
+}
+
+func UpdatePost(c echo.Context) error {
+	// 投稿内容を受け取る構造体
+	type Req struct {
+		Title   string `json:"title"`
+		Content string `json:"content"`
+	}
+	req := new(Req)
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
+	}
+
+	id := c.Param("id")
+	idInt, err := strconv.Atoi(id)
+	if err != nil { return err } // 変換失敗時のエラー処理
+
+	offset := idInt - 1
+	if offset < 0 { offset = 0 }
+
+	user := c.Get("user").(models.User)
+
+	// db接続
+	var post models.Post
+	result := db.DB.Where("user_id = ?", user.ID).Offset(offset).Limit(1).Find(&post)
+	if err := result.Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2004]})
+	}
+	if result.RowsAffected == 0 {
+	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4004]})
+	}
+
+	// データ更新
+	post.Title   = req.Title
+	post.Content = req.Content
+	if err := db.DB.Save(&post).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2005]})
+	}
+
+	// 必要な情報だけをマッピング
+	response := models.PostResponse{
+		ID:        uint(idInt),
+		Title:     post.Title,
+		Content:   post.Content,
+		CreatedAt: post.CreatedAt,
+		UpdatedAt: post.UpdatedAt,
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1002], "post": response})
 }

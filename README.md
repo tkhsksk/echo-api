@@ -107,6 +107,15 @@ curl -X POST http://localhost:4207/posts \
 	"content": "これはテスト投稿の内容です"
 }'
 
+# ポストの更新
+curl -X PUT http://localhost:4207/posts/1 \
+-H "Content-Type: application/json" \
+-H "Session-ID: 5cb1dbfb-9696-4992-901f-839e49bb8e3b" \
+-d '{
+	"title": "テスト投稿edit",
+	"content": "これはテスト投稿の内容ですedit"
+}'
+
 # ポストの取得
 curl -X GET http://localhost:4207/posts \
 -H "Content-Type: application/json" \

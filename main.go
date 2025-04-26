@@ -52,7 +52,8 @@ func main() {
 
 	// 認証が必要なAPIにミドルウェアを適用
 	userAuthGroup := e.Group("/posts", middlewares.IsAuthenticatedUser)
-	userAuthGroup.POST("", handlers.CreatePosts)
+	userAuthGroup.POST("", handlers.CreatePost)
+	userAuthGroup.PUT("/:id", handlers.UpdatePost)
 	userAuthGroup.GET("", handlers.GetPosts)        // 一覧取得
 	userAuthGroup.GET("/:id", handlers.GetPostByID)        // 個別取得
 
