@@ -10,6 +10,7 @@ type User struct {
 	Password  string    `gorm:"not null"` // ハッシュ化されたパスワード
 	Status    string    `gorm:"default:active"` // active / suspended など
 	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type UserResponse struct {

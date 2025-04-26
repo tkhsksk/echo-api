@@ -11,6 +11,7 @@ import (
 	"api/db"
 	"api/models"
 	"api/middlewares"
+	"api/messages"
 )
 
 // 管理者登録
@@ -22,15 +23,15 @@ func AdminRegister(c echo.Context) error {
 
 	req := new(Req)
 	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "無効なリクエストです"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
 	
 	if !middlewares.ValidateEmail(req.Email) {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "メール形式が違います"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5000]})
 	}
 
 	if !middlewares.ValidatePassword(req.Password) {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "パスワード形式が違います"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5001]})
 	}
 
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -42,10 +43,10 @@ func AdminRegister(c echo.Context) error {
 	}
 
 	if err := db.DB.Create(&user).Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{"error": "登録に失敗しました"})
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{"message": "管理者登録完了"})
+	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1001]})
 }
 
 // ユーザー登録
@@ -57,15 +58,15 @@ func UserRegister(c echo.Context) error {
 
 	req := new(Req)
 	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "無効なリクエストです"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
 
 	if !middlewares.ValidateEmail(req.Email) {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "メール形式が違います"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5000]})
 	}
 
 	if !middlewares.ValidatePassword(req.Password) {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "パスワード形式が違います"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5001]})
 	}
 
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -77,10 +78,10 @@ func UserRegister(c echo.Context) error {
 	}
 
 	if err := db.DB.Create(&user).Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{"error": "登録に失敗しました"})
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{"message": "ユーザー登録完了"})
+	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1001]})
 }
 
 // ユーザーログイン
@@ -92,20 +93,20 @@ func UserLogin(c echo.Context) error {
 
 	req := new(Req)
 	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "無効なリクエストです"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
 
 	var user models.User
 	if err := db.DB.Where("email = ?", req.Email).First(&user).Error; err != nil {
-		return c.JSON(http.StatusUnauthorized, echo.Map{"error": "ユーザーが見つかりません"})
+		return c.JSON(http.StatusUnauthorized, echo.Map{"message": messages.Status[4000]})
 	}
 
 	if user.Status != "active" {
-	    return c.JSON(http.StatusForbidden, echo.Map{"error": "ユーザーがアクティブではありません",})
+	    return c.JSON(http.StatusForbidden, echo.Map{"message": messages.Status[4001],})
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-		return c.JSON(http.StatusUnauthorized, echo.Map{"error": "パスワードが間違っています"})
+		return c.JSON(http.StatusUnauthorized, echo.Map{"message": messages.Status[5001]})
 	}
 
 	// セッション作成
@@ -116,7 +117,7 @@ func UserLogin(c echo.Context) error {
 	}
 
 	if err := db.DB.Create(&session).Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{"error": "セッション作成失敗"})
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2001]})
 	}
 
 	// クッキーでセッションID返す
@@ -129,7 +130,7 @@ func UserLogin(c echo.Context) error {
 	})
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"message": "ログイン成功",
+		"message": messages.Status[1000],
 		"session_id": session.ID,
 	})
 }
@@ -143,20 +144,20 @@ func AdminLogin(c echo.Context) error {
 
 	req := new(Req)
 	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "無効なリクエストです"})
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
 
 	var admin models.Admin
 	if err := db.DB.Where("email = ?", req.Email).First(&admin).Error; err != nil {
-		return c.JSON(http.StatusUnauthorized, echo.Map{"error": "管理者が見つかりません"})
+		return c.JSON(http.StatusUnauthorized, echo.Map{"message": messages.Status[4002]})
 	}
 
 	if admin.Status != "active" {
-	    return c.JSON(http.StatusForbidden, echo.Map{"error": "管理者がアクティブではありません",})
+	    return c.JSON(http.StatusForbidden, echo.Map{"message": messages.Status[4003],})
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(req.Password)); err != nil {
-		return c.JSON(http.StatusUnauthorized, echo.Map{"error": "パスワードが間違っています"})
+		return c.JSON(http.StatusUnauthorized, echo.Map{"message": messages.Status[2003]})
 	}
 
 	// セッション作成
@@ -167,7 +168,7 @@ func AdminLogin(c echo.Context) error {
 	}
 
 	if err := db.DB.Create(&session).Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{"error": "セッション作成失敗"})
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2001]})
 	}
 
 	// クッキーでセッションID返す
@@ -180,7 +181,7 @@ func AdminLogin(c echo.Context) error {
 	})
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"message": "ログイン成功",
+		"message": messages.Status[1000],
 		"session_id": session.ID,
 	})
 }
