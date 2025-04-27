@@ -29,9 +29,12 @@ func GetUsers(c echo.Context) error {
 	var response []models.UserResponse
 	for _, u := range users {
 		response = append(response, models.UserResponse{
-			ID:     u.ID,
-			Email:  u.Email,
-			Status: u.Status,
+			ID:        u.ID,
+			Name:      u.Name,
+			Email:     u.Email,
+			Status:    u.Status,
+			CreatedAt: u.CreatedAt,
+			UpdatedAt: u.UpdatedAt,
 		})
 	}
 
@@ -50,9 +53,12 @@ func GetUserByID(c echo.Context) error {
 
 	// 必要な情報だけをマッピング
 	response := models.UserResponse{
-		ID:     user.ID,
-		Email:  user.Email,
-		Status: user.Status,
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Status:    user.Status,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}
 
 	return c.JSON(http.StatusOK, response)

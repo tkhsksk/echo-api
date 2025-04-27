@@ -66,6 +66,7 @@ func GetPosts(c echo.Context) error {
 			ID:        uint(i+1),
 			Title:     u.Title,
 			Content:   u.Content,
+			Status:    u.Status,
 			CreatedAt: u.CreatedAt,
 			UpdatedAt: u.UpdatedAt,
 		})
@@ -99,6 +100,7 @@ func GetPostByID(c echo.Context) error {
 		ID:        uint(idInt),
 		Title:     post.Title,
 		Content:   post.Content,
+		Status:    post.Status,
 		CreatedAt: post.CreatedAt,
 		UpdatedAt: post.UpdatedAt,
 	}
@@ -148,6 +150,7 @@ func UpdatePost(c echo.Context) error {
 		ID:        uint(idInt),
 		Title:     post.Title,
 		Content:   post.Content,
+		Status:    post.Status,
 		CreatedAt: post.CreatedAt,
 		UpdatedAt: post.UpdatedAt,
 	}

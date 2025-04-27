@@ -2,10 +2,21 @@ package middlewares
 
 import (
 	"regexp"
+	"unicode/utf8"
 )
 
 // メールアドレスの正規表現
 var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+
+func ValidateName(name string) bool {
+	// UTF-8で文字列の長さを取得
+	nameLength := utf8.RuneCountInString(name)
+	
+	if nameLength < 3 || nameLength > 50 {
+		return false
+	}
+	return true
+}
 
 // メールアドレスを検証する関数
 func ValidateEmail(email string) bool {

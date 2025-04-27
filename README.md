@@ -55,7 +55,8 @@ truncate table [テーブル名];
 curl -X POST http://localhost:4207/auth/admin/register \
 -H "Content-Type: application/json" \
 -d '{
-	"email": "user@example.com",
+	"name": "a",
+	"email": "user+003@example.com",
 	"password": "Password123"
 }'
 
@@ -63,7 +64,8 @@ curl -X POST http://localhost:4207/auth/admin/register \
 curl -X POST http://localhost:4207/auth/user/register \
 -H "Content-Type: application/json" \
 -d '{
-	"email": "user@example.com",
+	"name": "テスト太郎",
+	"email": "user+001@example.com",
 	"password": "Password123"
 }'
 
@@ -86,7 +88,7 @@ curl -X POST http://localhost:4207/auth/user/login \
 # ユーザーの取得
 curl -X GET http://localhost:4207/users \
 -H "Content-Type: application/json" \
--H "Session-ID: [管理者セッション]"
+-H "Session-ID: f96cca12-703b-42ad-9833-44fd3cd4e91a"
 
 # 個別ユーザーの取得
 curl -X GET http://localhost:4207/users/5 \
@@ -101,7 +103,7 @@ curl -X GET http://localhost:4207/users/sessions \
 # ポストの登録
 curl -X POST http://localhost:4207/posts \
 -H "Content-Type: application/json" \
--H "Session-ID: [ユーザーセッション]" \
+-H "Session-ID: f8edb11e-8eb0-4570-800f-b4206ce01b36" \
 -d '{
 	"title": "テスト投稿",
 	"content": "これはテスト投稿の内容です"
@@ -110,7 +112,7 @@ curl -X POST http://localhost:4207/posts \
 # ポストの更新
 curl -X PUT http://localhost:4207/posts/1 \
 -H "Content-Type: application/json" \
--H "Session-ID: 5cb1dbfb-9696-4992-901f-839e49bb8e3b" \
+-H "Session-ID: [ユーザーセッション]" \
 -d '{
 	"title": "テスト投稿edit",
 	"content": "これはテスト投稿の内容ですedit"
@@ -119,10 +121,10 @@ curl -X PUT http://localhost:4207/posts/1 \
 # ポストの取得
 curl -X GET http://localhost:4207/posts \
 -H "Content-Type: application/json" \
--H "Session-ID: [ユーザーセッション]"
+-H "Session-ID: f8edb11e-8eb0-4570-800f-b4206ce01b36"
 
 # 個別ポストの取得
 curl -X GET http://localhost:4207/posts/1 \
 -H "Content-Type: application/json" \
--H "Session-ID: [ユーザーセッション]"
+-H "Session-ID: a55fab5b-7e51-4f87-8a94-a87f9d5f671b"
 ```

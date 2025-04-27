@@ -17,6 +17,7 @@ import (
 // 管理者登録
 func AdminRegister(c echo.Context) error {
 	type Req struct {
+		Name     string `json:"name"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
@@ -25,7 +26,11 @@ func AdminRegister(c echo.Context) error {
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
-	
+
+	if !middlewares.ValidateName(req.Name) {
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5002]})
+	}
+
 	if !middlewares.ValidateEmail(req.Email) {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5000]})
 	}
@@ -37,6 +42,7 @@ func AdminRegister(c echo.Context) error {
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 
 	user := models.Admin{
+		Name:     req.Name,
 		Email:    req.Email,
 		Password: string(hashed),
 		Status:   "active",
@@ -52,6 +58,7 @@ func AdminRegister(c echo.Context) error {
 // ユーザー登録
 func UserRegister(c echo.Context) error {
 	type Req struct {
+		Name     string `json:"name"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
@@ -59,6 +66,10 @@ func UserRegister(c echo.Context) error {
 	req := new(Req)
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
+	}
+
+	if !middlewares.ValidateName(req.Name) {
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5002]})
 	}
 
 	if !middlewares.ValidateEmail(req.Email) {
@@ -72,6 +83,7 @@ func UserRegister(c echo.Context) error {
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 
 	user := models.User{
+		Name:     req.Name,
 		Email:    req.Email,
 		Password: string(hashed),
 		Status:   "active",
