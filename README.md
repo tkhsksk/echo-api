@@ -1,7 +1,3 @@
-<p align="center">
-<br><img src="https://github.com/tkhsksk/echo-api/blob/develop/static/logo.svg" width="119">  
-</p><br>
-
 ## 初回起動
 
 ```bash
