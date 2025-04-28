@@ -141,6 +141,9 @@ func UserLogin(c echo.Context) error {
 		MaxAge:   86400,
 	})
 
+	// メール送信
+	// sendMail(req.Email)
+
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": messages.Status[1000],
 		"session_id": session.ID,
