@@ -11,7 +11,7 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-func SendMail(address string, name string) error {
+func SendMail(address string, code string, user_id uint, passcode_id uint) error {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -25,19 +25,25 @@ func SendMail(address string, name string) error {
 	// テンプレート読み込みとデータの埋め込み
 	t, err := template.ParseFiles("templates/email.html")
 	if err != nil {
-		log.Println("Error parsing template:", err)
+		log.Println("テンプレートエラー:", err)
 		return err
 	}
 
 	var body bytes.Buffer
 	data := struct {
-		Name string
+		UserId uint
+		CodeId uint
+		Code   string
+		Url    string
 	}{
-		Name: name,
+		UserId: user_id,
+		CodeId: passcode_id,
+		Code:   code,
+		Url:    os.Getenv("API_URL"),
 	}
 
 	if err := t.Execute(&body, data); err != nil {
-		log.Println("Error executing template:", err)
+		log.Println("テンプレート内部エラー:", err)
 		return err
 	}
 
@@ -55,6 +61,6 @@ func SendMail(address string, name string) error {
 		return err
 	}
 
-	log.Println("HTML email sent successfully!")
+	log.Println("emailの送信に成功しました")
 	return nil
 }

@@ -56,7 +56,7 @@ curl -X POST http://localhost:4207/auth/admin/register \
 -H "Content-Type: application/json" \
 -d '{
 	"name": "takahshi",
-	"email": "tkhsksk0318@gmail.com",
+	"email": "user+001@example.com",
 	"password": "Password123"
 }'
 

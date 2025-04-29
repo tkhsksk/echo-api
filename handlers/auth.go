@@ -62,7 +62,7 @@ func AdminRegister(c echo.Context) error {
 	// 	return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2001]})
 	// }
 	// メール送信
-	// middlewares.SendMail(req.Email, passcode.Code)
+	// middlewares.SendMail(req.Email, passcode.Code, admin.ID, passcode.ID)
 
 	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1003]})
 }

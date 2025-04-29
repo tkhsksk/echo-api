@@ -6,6 +6,16 @@
 </head>
 <body>
   <p>パスコードをお送りします</p>
-  <h1>{{.Name}}</h1>
+  <h1 style="background-color: #e9e9e980;letter-spacing: .35rem;display: inline;padding: 10px">{{.Code}}</h1>
+  <p>このAPIシステムは仮なので、ユーザー自ら以下のapiを実行してください<br />ユーザーが有効になります</p>
+  <div style="background-color: #e9e9e980;padding: 10px;">
+    <code>
+      curl -X POST {{.Url}}/passcode/{{.UserId}}/{{.CodeId}} \<br />
+      -H "Content-Type: application/json" \<br />
+      -d '{<br />
+          "password": "送られてきたパスコード"<br />
+      }'
+  </code>
+  </div>
 </body>
 </html>
