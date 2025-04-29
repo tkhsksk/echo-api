@@ -55,8 +55,8 @@ truncate table [テーブル名];
 curl -X POST http://localhost:4207/auth/admin/register \
 -H "Content-Type: application/json" \
 -d '{
-	"name": "a",
-	"email": "user+003@example.com",
+	"name": "takahshi",
+	"email": "tkhsksk0318@gmail.com",
 	"password": "Password123"
 }'
 
@@ -82,7 +82,7 @@ curl -X POST http://localhost:4207/auth/user/login \
 -H "Content-Type: application/json" \
 -d '{
     "email": "hoge@example.com",
-    "password": "password123"
+    "password": "Password123"
 }'
 
 # ユーザーの取得

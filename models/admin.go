@@ -14,6 +14,7 @@ type Admin struct {
 	UpdatedAt time.Time
 
 	AdminSessions []AdminSession `gorm:"foreignKey:AdminID"`
+	Passcodes     []Passcode     `gorm:"foreignKey:AdminID"`
 }
 
 type AdminResponse struct {

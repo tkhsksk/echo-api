@@ -41,18 +41,30 @@ func AdminRegister(c echo.Context) error {
 
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 
-	user := models.Admin{
+	admin := models.Admin{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: string(hashed),
 		Status:   "active",
 	}
 
-	if err := db.DB.Create(&user).Error; err != nil {
+	if err := db.DB.Create(&admin).Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1001]})
+	// パスコード作成
+	// passcode := models.Passcode{
+	// 	AdminID:   admin.ID,
+	// 	Code:	   middlewares.GenerateUnique4DigitCode(),
+	// 	ExpiresAt: time.Now().Add(1 * time.Hour), // 1時間有効
+	// }
+	// if err := db.DB.Create(&passcode).Error; err != nil {
+	// 	return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2001]})
+	// }
+	// メール送信
+	// middlewares.SendMail(req.Email, passcode.Code)
+
+	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1003]})
 }
 
 // ユーザー登録
@@ -140,9 +152,6 @@ func UserLogin(c echo.Context) error {
 		HttpOnly: true,
 		MaxAge:   86400,
 	})
-
-	// メール送信
-	// sendMail(req.Email)
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": messages.Status[1000],
