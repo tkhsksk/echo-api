@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"time"
+	"log"
 
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -10,6 +11,7 @@ import (
 
 	"api/db"
 	"api/models"
+	"api/mailer"
 	"api/middlewares"
 	"api/messages"
 )
@@ -45,7 +47,7 @@ func AdminRegister(c echo.Context) error {
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: string(hashed),
-		Status:   "active",
+		Status:   "suspended",
 	}
 
 	if err := db.DB.Create(&admin).Error; err != nil {
@@ -53,18 +55,23 @@ func AdminRegister(c echo.Context) error {
 	}
 
 	// パスコード作成
-	// passcode := models.Passcode{
-	// 	AdminID:   admin.ID,
-	// 	Code:	   middlewares.GenerateUnique4DigitCode(),
-	// 	ExpiresAt: time.Now().Add(1 * time.Hour), // 1時間有効
-	// }
-	// if err := db.DB.Create(&passcode).Error; err != nil {
-	// 	return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2001]})
-	// }
-	// メール送信
-	// middlewares.SendMail(req.Email, passcode.Code, admin.ID, passcode.ID)
+	passcode := models.Passcode{
+		AdminID:   admin.ID,
+		Code:	   middlewares.GenerateUnique4DigitCode(),
+		ExpiresAt: time.Now().Add(1 * time.Hour), // 1時間有効
+	}
+	if err := db.DB.Create(&passcode).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2001]})
+	}
+	// 非同期メール送信
+	go func() {
+		err := mailer.SendPasscodeMail(req.Email, passcode.Code, admin.ID, passcode.ID)
+		if err != nil {
+			log.Println("メール送信失敗:", err)
+		}
+	}()
 
-	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1003]})
+	return c.JSON(http.StatusCreated, echo.Map{"message": messages.Status[1003]})
 }
 
 // ユーザー登録
@@ -105,7 +112,7 @@ func UserRegister(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1001]})
+	return c.JSON(http.StatusCreated, echo.Map{"message": messages.Status[1001]})
 }
 
 // ユーザーログイン
@@ -154,7 +161,7 @@ func UserLogin(c echo.Context) error {
 	})
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"message": messages.Status[1000],
+		"message":    messages.Status[1000],
 		"session_id": session.ID,
 	})
 }
@@ -205,7 +212,7 @@ func AdminLogin(c echo.Context) error {
 	})
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"message": messages.Status[1000],
+		"message":    messages.Status[1000],
 		"session_id": session.ID,
 	})
 }

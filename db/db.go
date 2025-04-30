@@ -47,6 +47,7 @@ func Init() {
 		&models.UserSession{},
 		&models.Post{},
 		&models.Passcode{},
+		&models.APILog{},
 	); err != nil {
 		log.Fatalf("マイグレーション失敗: %v", err)
 	}

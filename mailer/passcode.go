@@ -1,4 +1,4 @@
-package middlewares
+package mailer
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-func SendMail(address string, code string, user_id uint, passcode_id uint) error {
+func SendPasscodeMail(address string, code string, user_id uint, passcode_id uint) error {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}

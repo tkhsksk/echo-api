@@ -37,6 +37,8 @@ func main() {
         }
         return c.Render(http.StatusOK, "index.html", data)
     })
+    // ログ保存
+    e.Use(middlewares.APILogMiddleware)
 
     // 画像登録
     e.File("/myfont.ttf", "static/myfont.ttf")
@@ -49,6 +51,8 @@ func main() {
 	e.POST("/auth/admin/login", handlers.AdminLogin)
 	e.POST("/auth/user/register", handlers.UserRegister)
 	e.POST("/auth/user/login", handlers.UserLogin)
+
+	e.POST("/passcode/:id/:uid", handlers.AdminPasscodes)
 
 	// 認証が必要なAPIにミドルウェアを適用
 	userAuthGroup := e.Group("/posts", middlewares.IsAuthenticatedUser)

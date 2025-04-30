@@ -39,7 +39,10 @@ func CreatePost(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1001], "post": post})
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1001],
+		"post":    post,
+	})
 }
 
 // 自身が登録した投稿一覧取得
@@ -72,7 +75,10 @@ func GetPosts(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1005],
+		"posts":   response,
+	})
 }
 
 func GetPostByID(c echo.Context) error {
@@ -105,7 +111,10 @@ func GetPostByID(c echo.Context) error {
 		UpdatedAt: post.UpdatedAt,
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1005],
+		"post":    response,
+	})
 }
 
 func UpdatePost(c echo.Context) error {
@@ -155,5 +164,8 @@ func UpdatePost(c echo.Context) error {
 		UpdatedAt: post.UpdatedAt,
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{"message": messages.Status[1002], "post": response})
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1002],
+		"post":    response,
+	})
 }

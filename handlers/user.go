@@ -38,7 +38,10 @@ func GetUsers(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1005],
+		"users":   response,
+	})
 }
 
 func GetUserByID(c echo.Context) error {
@@ -61,5 +64,8 @@ func GetUserByID(c echo.Context) error {
 		UpdatedAt: user.UpdatedAt,
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1005],
+		"user":    response,
+	})
 }

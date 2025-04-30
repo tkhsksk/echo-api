@@ -36,7 +36,10 @@ func GetUserSessions(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, echo.Map{
+		"message":  messages.Status[1005],
+		"sessions": response,
+	})
 }
 
 func GetSessionsByUserID(c echo.Context) error {
@@ -65,5 +68,8 @@ func GetSessionsByUserID(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1005],
+		"session": response,
+	})
 }

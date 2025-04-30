@@ -81,8 +81,8 @@ curl -X POST http://localhost:4207/auth/admin/login \
 curl -X POST http://localhost:4207/auth/user/login \
 -H "Content-Type: application/json" \
 -d '{
-    "email": "hoge@example.com",
-    "password": "Password123"
+    "email": "user@example.com",
+    "password": "password123"
 }'
 
 # ユーザーの取得

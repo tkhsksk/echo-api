@@ -10,10 +10,10 @@
   <p>このAPIシステムは仮なので、ユーザー自ら以下のapiを実行してください<br />ユーザーが有効になります</p>
   <div style="background-color: #e9e9e980;padding: 10px;">
     <code>
-      curl -X POST {{.Url}}/passcode/{{.UserId}}/{{.CodeId}} \<br />
+      curl -X POST {{.Url}}/passcode/{{.CodeId}}/{{.UserId}} \<br />
       -H "Content-Type: application/json" \<br />
       -d '{<br />
-          "password": "送られてきたパスコード"<br />
+          "passcode": "送られてきたパスコード"<br />
       }'
   </code>
   </div>
