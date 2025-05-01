@@ -46,6 +46,9 @@ func main() {
     e.File("/logo.svg", "static/logo.svg")
     e.File("/logo-dark.svg", "static/logo-dark.svg")
 
+    // データベース削除
+    e.POST("/delete", db.DbDelete)
+
 	// 認証関連
 	e.POST("/auth/admin/register", handlers.AdminRegister)
 	e.POST("/auth/admin/login", handlers.AdminLogin)

@@ -82,13 +82,13 @@ curl -X POST http://localhost:4207/auth/user/login \
 -H "Content-Type: application/json" \
 -d '{
     "email": "user@example.com",
-    "password": "password123"
+    "password": "Password123"
 }'
 
 # ユーザーの取得
 curl -X GET http://localhost:4207/users \
 -H "Content-Type: application/json" \
--H "Session-ID: f96cca12-703b-42ad-9833-44fd3cd4e91a"
+-H "Session-ID: 538e54d0-0e21-4222-9d12-55845e573f2f"
 
 # 個別ユーザーの取得
 curl -X GET http://localhost:4207/users/5 \
@@ -127,4 +127,11 @@ curl -X GET http://localhost:4207/posts \
 curl -X GET http://localhost:4207/posts/1 \
 -H "Content-Type: application/json" \
 -H "Session-ID: a55fab5b-7e51-4f87-8a94-a87f9d5f671b"
+
+# データベースのリセット
+curl -X POST http://localhost:4207/delete \
+-H "Content-Type: application/json" \
+-d '{
+    "password": "パスワード"
+}'
 ```

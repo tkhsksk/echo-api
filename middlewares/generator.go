@@ -5,14 +5,19 @@ import (
 	"time"
 )
 
-func GenerateUnique4DigitCode() string {
+func GenerateUnique6DigitCode() string {
 	rand.Seed(time.Now().UnixNano())
+	code := ""
+	counts := make(map[rune]int)
 
-	digits := []rune{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
-	rand.Shuffle(len(digits), func(i, j int) {
-		digits[i], digits[j] = digits[j], digits[i]
-	})
-
-	// 先頭0もOKなのでそのまま先頭から4桁
-	return string(digits[:4])
+	for len(code) < 6 {
+		d := rune('0' + rand.Intn(10))
+		// この数字がすでに2回出ていたらスキップ
+		if counts[d] >= 2 {
+			continue
+		}
+		code += string(d)
+		counts[d]++
+	}
+	return code
 }

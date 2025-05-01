@@ -57,7 +57,7 @@ func AdminRegister(c echo.Context) error {
 	// パスコード作成
 	passcode := models.Passcode{
 		AdminID:   admin.ID,
-		Code:	   middlewares.GenerateUnique4DigitCode(),
+		Code:	   middlewares.GenerateUnique6DigitCode(),
 		ExpiresAt: time.Now().Add(1 * time.Hour), // 1時間有効
 	}
 	if err := db.DB.Create(&passcode).Error; err != nil {
