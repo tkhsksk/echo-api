@@ -69,3 +69,22 @@ func GetUserByID(c echo.Context) error {
 		"user":    response,
 	})
 }
+
+func GetProfile(c echo.Context) error {
+	user := c.Get("user").(models.User)
+
+	// 必要な情報だけをマッピング
+	response := models.UserResponse{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Status:    user.Status,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1005],
+		"user":    response,
+	})
+}

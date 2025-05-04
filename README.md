@@ -51,6 +51,7 @@ truncate table [テーブル名];
 ## apiテスト
 
 ```bash
+# 管理者関連
 # 管理者の登録
 curl -X POST http://localhost:4207/auth/admin/register \
 -H "Content-Type: application/json" \
@@ -60,25 +61,8 @@ curl -X POST http://localhost:4207/auth/admin/register \
 	"password": "Password123"
 }'
 
-# ユーザーの登録
-curl -X POST http://localhost:4207/auth/user/register \
--H "Content-Type: application/json" \
--d '{
-	"name": "テスト太郎",
-	"email": "user+001@example.com",
-	"password": "Password123"
-}'
-
 # 管理者ログイン
 curl -X POST http://localhost:4207/auth/admin/login \
--H "Content-Type: application/json" \
--d '{
-    "email": "user@example.com",
-    "password": "Password123"
-}'
-
-# ユーザーログイン
-curl -X POST http://localhost:4207/auth/user/login \
 -H "Content-Type: application/json" \
 -d '{
     "email": "user@example.com",
@@ -100,17 +84,35 @@ curl -X GET http://localhost:4207/users/sessions \
 -H "Content-Type: application/json" \
 -H "Session-ID: [管理者セッション]"
 
-# ポストの登録
-curl -X POST http://localhost:4207/posts \
+# ユーザー関連
+# ユーザーの登録
+curl -X POST http://localhost:4207/auth/user/register \
 -H "Content-Type: application/json" \
--H "Session-ID: f8edb11e-8eb0-4570-800f-b4206ce01b36" \
+-d '{
+	"name": "テスト太郎",
+	"email": "user+001@example.com",
+	"password": "Password123"
+}'
+
+# ユーザーログイン
+curl -X POST http://localhost:4207/auth/user/login \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "user@example.com",
+    "password": "Password123"
+}'
+
+# ポストの登録
+curl -X POST http://localhost:4207/auth/user/posts \
+-H "Content-Type: application/json" \
+-H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a" \
 -d '{
 	"title": "テスト投稿",
 	"content": "これはテスト投稿の内容です"
 }'
 
 # ポストの更新
-curl -X PUT http://localhost:4207/posts/1 \
+curl -X PUT http://localhost:4207/auth/user/posts/1 \
 -H "Content-Type: application/json" \
 -H "Session-ID: [ユーザーセッション]" \
 -d '{
@@ -119,14 +121,19 @@ curl -X PUT http://localhost:4207/posts/1 \
 }'
 
 # ポストの取得
-curl -X GET http://localhost:4207/posts \
+curl -X GET http://localhost:4207/auth/user/posts \
 -H "Content-Type: application/json" \
--H "Session-ID: f8edb11e-8eb0-4570-800f-b4206ce01b36"
+-H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a"
 
 # 個別ポストの取得
-curl -X GET http://localhost:4207/posts/1 \
+curl -X GET http://localhost:4207/auth/user/posts/1 \
 -H "Content-Type: application/json" \
 -H "Session-ID: a55fab5b-7e51-4f87-8a94-a87f9d5f671b"
+
+# プロフィール取得
+curl -X GET http://localhost:4207/auth/user/profiles \
+-H "Content-Type: application/json" \
+-H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a"
 
 # データベースのリセット
 curl -X POST http://localhost:4207/delete \
