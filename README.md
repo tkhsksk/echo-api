@@ -70,17 +70,17 @@ curl -X POST http://localhost:4207/auth/admin/login \
 }'
 
 # ユーザーの取得
-curl -X GET http://localhost:4207/users \
+curl -X GET http://localhost:4207/authed/admin/users \
 -H "Content-Type: application/json" \
 -H "Session-ID: 538e54d0-0e21-4222-9d12-55845e573f2f"
 
 # 個別ユーザーの取得
-curl -X GET http://localhost:4207/users/5 \
+curl -X GET http://localhost:4207/authed/admin/users/5 \
 -H "Content-Type: application/json" \
 -H "Session-ID: [管理者セッション]"
 
 # セッションの取得
-curl -X GET http://localhost:4207/users/sessions \
+curl -X GET http://localhost:4207/authed/admin/users/sessions \
 -H "Content-Type: application/json" \
 -H "Session-ID: [管理者セッション]"
 
@@ -103,7 +103,7 @@ curl -X POST http://localhost:4207/auth/user/login \
 }'
 
 # ポストの登録
-curl -X POST http://localhost:4207/auth/user/posts \
+curl -X POST http://localhost:4207/authed/user/posts \
 -H "Content-Type: application/json" \
 -H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a" \
 -d '{
@@ -112,7 +112,7 @@ curl -X POST http://localhost:4207/auth/user/posts \
 }'
 
 # ポストの更新
-curl -X PUT http://localhost:4207/auth/user/posts/1 \
+curl -X PUT http://localhost:4207/authed/user/posts/1 \
 -H "Content-Type: application/json" \
 -H "Session-ID: [ユーザーセッション]" \
 -d '{
@@ -121,17 +121,17 @@ curl -X PUT http://localhost:4207/auth/user/posts/1 \
 }'
 
 # ポストの取得
-curl -X GET http://localhost:4207/auth/user/posts \
+curl -X GET http://localhost:4207/authed/user/posts \
 -H "Content-Type: application/json" \
 -H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a"
 
 # 個別ポストの取得
-curl -X GET http://localhost:4207/auth/user/posts/1 \
+curl -X GET http://localhost:4207/authed/user/posts/1 \
 -H "Content-Type: application/json" \
 -H "Session-ID: a55fab5b-7e51-4f87-8a94-a87f9d5f671b"
 
 # プロフィール取得
-curl -X GET http://localhost:4207/auth/user/profiles \
+curl -X GET http://localhost:4207/authed/user/profiles \
 -H "Content-Type: application/json" \
 -H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a"
 

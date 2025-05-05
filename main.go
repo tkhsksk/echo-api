@@ -58,18 +58,18 @@ func main() {
 	e.POST("/passcode/:id/:uid", handlers.AdminPasscodes)
 
 	// 認証が必要なAPIにミドルウェアを適用
-	userAuthGroup := e.Group("/auth/user", middlewares.IsAuthenticatedUser)
+	userAuthGroup := e.Group("/authed/user", middlewares.IsAuthenticatedUser)
 	userAuthGroup.POST("/posts", handlers.CreatePost)
 	userAuthGroup.PUT("/posts/:id", handlers.UpdatePost)
 	userAuthGroup.GET("/posts", handlers.GetPosts)        // 一覧取得
 	userAuthGroup.GET("/posts/:id", handlers.GetPostByID) // 個別取得
 	userAuthGroup.GET("/profiles", handlers.GetProfile) // プロフィール取得
 
-	adminAuthGroup := e.Group("/users", middlewares.IsAuthenticatedAdmin)
-	adminAuthGroup.GET("", handlers.GetUsers)        				  // 一覧取得
-	adminAuthGroup.GET("/:id", handlers.GetUserByID) 				  // 個別取得
-	adminAuthGroup.GET("/sessions", handlers.GetUserSessions) // 一覧取得
-	adminAuthGroup.GET("/sessions/:id", handlers.GetSessionsByUserID) // 個別一覧取得
+	adminAuthGroup := e.Group("/authed/admin", middlewares.IsAuthenticatedAdmin)
+	adminAuthGroup.GET("/users", handlers.GetUsers)        				  // 一覧取得
+	adminAuthGroup.GET("/users/:id", handlers.GetUserByID) 				  // 個別取得
+	adminAuthGroup.GET("/users/sessions", handlers.GetUserSessions) // 一覧取得
+	adminAuthGroup.GET("/users/sessions/:id", handlers.GetSessionsByUserID) // 個別一覧取得
 
 	e.Start(":4207")
 }
