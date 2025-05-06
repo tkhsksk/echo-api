@@ -70,7 +70,7 @@ func GetUserByID(c echo.Context) error {
 	})
 }
 
-func GetProfile(c echo.Context) error {
+func GetUserProfile(c echo.Context) error {
 	user := c.Get("user").(models.User)
 
 	// 必要な情報だけをマッピング

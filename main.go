@@ -63,13 +63,14 @@ func main() {
 	userAuthGroup.PUT("/posts/:id", handlers.UpdatePost)
 	userAuthGroup.GET("/posts", handlers.GetPosts)        // 一覧取得
 	userAuthGroup.GET("/posts/:id", handlers.GetPostByID) // 個別取得
-	userAuthGroup.GET("/profiles", handlers.GetProfile) // プロフィール取得
+	userAuthGroup.GET("/profiles", handlers.GetUserProfile) // プロフィール取得
 
 	adminAuthGroup := e.Group("/authed/admin", middlewares.IsAuthenticatedAdmin)
 	adminAuthGroup.GET("/users", handlers.GetUsers)        				  // 一覧取得
 	adminAuthGroup.GET("/users/:id", handlers.GetUserByID) 				  // 個別取得
 	adminAuthGroup.GET("/users/sessions", handlers.GetUserSessions) // 一覧取得
 	adminAuthGroup.GET("/users/sessions/:id", handlers.GetSessionsByUserID) // 個別一覧取得
+	adminAuthGroup.GET("/profiles", handlers.GetAdminProfile) // プロフィール取得
 
 	e.Start(":4207")
 }
