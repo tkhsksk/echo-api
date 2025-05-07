@@ -48,6 +48,9 @@ func Init() {
 		&models.Post{},
 		&models.Passcode{},
 		&models.APILog{},
+		&models.Product{},
+		&models.Category{},
+		&models.Notification{},
 	); err != nil {
 		log.Fatalf("マイグレーション失敗: %v", err)
 	}

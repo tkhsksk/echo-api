@@ -20,7 +20,7 @@ type UserSessionResponse struct {
 }
 
 type UserSessionResponseByUserID struct {
-	ID        string `json:"id"`
+	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"createdAt"`
 	ExpiresAt time.Time `json:"expiresAt"`
 }

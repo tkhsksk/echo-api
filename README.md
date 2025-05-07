@@ -7,7 +7,9 @@ go version
 # dbを作成
 mysql -u root -p
 # パスワードの入力 Enter
+# db作成
 CREATE DATABASE IF NOT EXISTS [データベース名] DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+# db権限付与
 GRANT ALL PRIVILEGES ON [データベース名].* TO '[ユーザー名]'@'localhost';
 
 
@@ -39,13 +41,15 @@ go build -o myapp
 # dbのデータ確認
 mysql -u root -p
 # パスワードの入力 Enter
-show databases;
-show tables from [データベース名];
+# db移動
 use [データベース名];
+# データ確認
 select * from [テーブル名];
 
 # テーブル内のデータを削除
 truncate table [テーブル名];
+# テーブルの構造確認
+show full columns from [テーブル名];
 ```
 
 ## apiテスト

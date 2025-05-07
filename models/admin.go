@@ -15,6 +15,8 @@ type Admin struct {
 
 	AdminSessions []AdminSession `gorm:"foreignKey:AdminID"`
 	Passcodes     []Passcode     `gorm:"foreignKey:AdminID"`
+	Notifications []Notification `gorm:"foreignKey:AdminID"`
+	Categories    []Category     `gorm:"foreignKey:AdminID"`
 }
 
 type AdminResponse struct {

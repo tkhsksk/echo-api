@@ -67,6 +67,9 @@ func DbDelete(c echo.Context) error {
 		"posts",
 		"passcodes",
 		"api_logs",
+		"products",
+		"categories",
+		"notifications",
 	}
 
 	// 各テーブルに対して TRUNCATE を実行
