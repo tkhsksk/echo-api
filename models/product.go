@@ -14,6 +14,9 @@ type Product struct {
     CategoryID    uint      // 外部キー
     Category      Category  // Categoryとのリレーション
 
+    AdminID    uint      // 外部キー
+    Admin      Admin     // Adminとのリレーション
+
     CreatedAt     time.Time
     UpdatedAt     time.Time
 }

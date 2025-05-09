@@ -6,7 +6,8 @@ import (
 
 type Passcode struct {
 	ID        uint      `gorm:"primaryKey"`
-	AdminID   uint      `gorm:"not null;foreignKey"`  // 外部キーの指定
+	AdminID   uint      // 外部キー
+    Admin     Admin     // Adminとのリレーション
 	Code      string    `gorm:"not null"`
 	ExpiresAt time.Time
 	CreatedAt time.Time

@@ -6,8 +6,8 @@ import (
 
 type Post struct {
 	ID        uint      `gorm:"primaryKey"`
-	UserID    uint      `gorm:"not null;foreignKey"`  // 外部キーの指定
-	User      User      `gorm:"foreignKey:UserID"`    // リレーションの指定
+	UserID    uint      // 外部キー
+    User      User      // Userとのリレーション
 	Title     string    `gorm:"not null"`
 	Content   string    `gorm:"type:text"`
 	Status    string    `gorm:"default:active"` // active / suspended など

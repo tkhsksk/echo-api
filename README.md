@@ -86,7 +86,7 @@ curl -X GET http://localhost:4207/authed/admin/users/5 \
 # セッションの取得
 curl -X GET http://localhost:4207/authed/admin/users/sessions \
 -H "Content-Type: application/json" \
--H "Session-ID: [管理者セッション]"
+-H "Session-ID: 5a5340c9-edcd-4ba0-8853-22c8548e73d2"
 
 # ユーザー関連
 # ユーザーの登録
@@ -94,7 +94,7 @@ curl -X POST http://localhost:4207/auth/user/register \
 -H "Content-Type: application/json" \
 -d '{
 	"name": "テスト太郎",
-	"email": "user+001@example.com",
+	"email": "user@example.com",
 	"password": "Password123"
 }'
 

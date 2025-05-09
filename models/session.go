@@ -6,8 +6,8 @@ import (
 
 type UserSession struct {
 	ID        string    `gorm:"primaryKey"` // UUIDとかで生成
-	UserID    uint      `gorm:"not null;foreignKey"`  // 外部キーの指定
-	User      User      `gorm:"foreignKey:UserID"`    // リレーションの指定
+	UserID    uint      // 外部キー
+    User      User     // Userとのリレーション
 	ExpiresAt time.Time
 	CreatedAt time.Time
 }
@@ -27,8 +27,8 @@ type UserSessionResponseByUserID struct {
 
 type AdminSession struct {
 	ID        string    `gorm:"primaryKey"` // UUIDとかで生成
-	AdminID   uint      `gorm:"not null;foreignKey"`  // 外部キーの指定
-	Admin     Admin     `gorm:"foreignKey:AdminID"`   // リレーションの指定
+	AdminID   uint      // 外部キー
+    Admin     Admin     // Adminとのリレーション
 	ExpiresAt time.Time
 	CreatedAt time.Time
 }
