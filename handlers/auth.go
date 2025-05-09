@@ -41,6 +41,12 @@ func AdminRegister(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5001]})
 	}
 
+	// emailの重複チェック
+	var adminCheck models.Admin
+	if err := db.DB.Where("email = ?", req.Email).First(&adminCheck).Error; err == nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2007]})
+	}
+
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 
 	admin := models.Admin{
@@ -97,6 +103,12 @@ func UserRegister(c echo.Context) error {
 
 	if !middlewares.ValidatePassword(req.Password) {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5001]})
+	}
+
+	// emailの重複チェック
+	var userCheck models.User
+	if err := db.DB.Where("email = ?", req.Email).First(&userCheck).Error; err == nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2007]})
 	}
 
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
