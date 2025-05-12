@@ -8,7 +8,8 @@ import (
 type Category struct {
     ID        uint           `gorm:"primaryKey"`
     Name      string         `gorm:"size:100;not null"`
-    Content   string         `gorm:"type:text"`
+    Content   *string         `gorm:"type:text"`
+    Status    string         `gorm:"default:active"` // active / suspended など
     AdminID   uint           // 外部キー
     Admin     Admin          // Adminとのリレーション
     // 階層構造のための自己参照リレーション

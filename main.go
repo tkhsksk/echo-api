@@ -58,19 +58,38 @@ func main() {
 	e.POST("/passcode/:id/:uid", handlers.AdminPasscodes)
 
 	// 認証が必要なAPIにミドルウェアを適用
-	userAuthGroup := e.Group("/authed/user", middlewares.IsAuthenticatedUser)
-	userAuthGroup.POST("/posts", handlers.CreatePost)
-	userAuthGroup.PUT("/posts/:id", handlers.UpdatePost)
-	userAuthGroup.GET("/posts", handlers.GetPosts)        // 一覧取得
-	userAuthGroup.GET("/posts/:id", handlers.GetPostByID) // 個別取得
-	userAuthGroup.GET("/profiles", handlers.GetUserProfile) // プロフィール取得
+	// 通常ユーザー
+	user := e.Group("/authed/user", middlewares.IsAuthenticatedUser)
+	user.POST("/posts", handlers.CreatePost)
+	user.PUT("/posts/:id", handlers.UpdatePost)
+	user.GET("/posts", handlers.GetPosts)        // 一覧取得
+	user.GET("/posts/:id", handlers.GetPostByID) // 個別取得
 
-	adminAuthGroup := e.Group("/authed/admin", middlewares.IsAuthenticatedAdmin)
-	adminAuthGroup.GET("/users", handlers.GetUsers)        				  // 一覧取得
-	adminAuthGroup.GET("/users/:id", handlers.GetUserByID) 				  // 個別取得
-	adminAuthGroup.GET("/users/sessions", handlers.GetUserSessions) // 一覧取得
-	adminAuthGroup.GET("/users/sessions/:id", handlers.GetSessionsByUserID) // 個別一覧取得
-	adminAuthGroup.GET("/profiles", handlers.GetAdminProfile) // プロフィール取得
+	// 商品
+	user.GET("/products", handlers.GetProductsForUser) // 一覧取得
+
+	user.GET("/profiles", handlers.GetUserProfile) // プロフィール取得
+
+	// 管理者
+	admin := e.Group("/authed/admin", middlewares.IsAuthenticatedAdmin)
+	admin.GET("/users", handlers.GetUsers)        				  // 一覧取得
+	admin.GET("/users/:id", handlers.GetUserByID) 				  // 個別取得
+
+	admin.GET("/users/sessions", handlers.GetUserSessions) // 一覧取得
+	admin.GET("/users/sessions/:id", handlers.GetSessionsByUserID) // 個別一覧取得
+
+	// カテゴリー
+	admin.POST("/categories", handlers.CreateCategory) // 作成
+	admin.GET("/categories", handlers.GetCategories) // 一覧取得
+	admin.GET("/categories/:id", handlers.GetCategoryByID) // 個別取得
+	admin.PUT("/categories/:id", handlers.UpdateCategory) // 更新
+
+	admin.POST("/products", handlers.CreateProduct) // 商品作成
+	admin.GET("/products", handlers.GetProductsForAdmin) // 商品一覧取得
+	admin.GET("/products/:id", handlers.GetProductByID) // 商品個別取得
+	admin.PUT("/products/:id", handlers.UpdateProduct) // 商品更新
+
+	admin.GET("/profiles", handlers.GetAdminProfile) // プロフィール取得
 
 	e.Start(":4207")
 }

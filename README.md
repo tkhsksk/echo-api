@@ -69,7 +69,7 @@ curl -X POST http://localhost:4207/auth/admin/register \
 curl -X POST http://localhost:4207/auth/admin/login \
 -H "Content-Type: application/json" \
 -d '{
-    "email": "user@example.com",
+    "email": "tkhsksk0318@gmail.com",
     "password": "Password123"
 }'
 
@@ -87,6 +87,19 @@ curl -X GET http://localhost:4207/authed/admin/users/5 \
 curl -X GET http://localhost:4207/authed/admin/users/sessions \
 -H "Content-Type: application/json" \
 -H "Session-ID: 5a5340c9-edcd-4ba0-8853-22c8548e73d2"
+
+# 商品
+# 作成
+curl -X POST http://localhost:4207/authed/admin/products \
+-H "Content-Type: application/json" \
+-H "Session-ID: 27aa5b2c-8310-499f-b104-c7ac5ddda109" \
+-d '{
+    "name": "テスト商品",
+    "price": 1200,
+    "content": "",
+    "status": "active",
+    "category_id": 1
+}'
 
 # ユーザー関連
 # ユーザーの登録
