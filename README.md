@@ -92,7 +92,7 @@ curl -X GET http://localhost:4207/authed/admin/users/sessions \
 # 作成
 curl -X POST http://localhost:4207/authed/admin/products \
 -H "Content-Type: application/json" \
--H "Session-ID: 27aa5b2c-8310-499f-b104-c7ac5ddda109" \
+-H "Session-ID: 4b5de801-f6aa-4241-9fb2-943b88669375" \
 -d '{
     "name": "テスト商品",
     "price": 1200,
@@ -100,6 +100,37 @@ curl -X POST http://localhost:4207/authed/admin/products \
     "status": "active",
     "category_id": 1
 }'
+
+# 取得
+curl -X GET http://localhost:4207/authed/admin/products/3 \
+-H "Content-Type: application/json" \
+-H "Session-ID: 4b5de801-f6aa-4241-9fb2-943b88669375"
+
+# 一覧取得
+curl -X GET http://localhost:4207/authed/admin/products \
+-H "Content-Type: application/json" \
+-H "Session-ID: 4b5de801-f6aa-4241-9fb2-943b88669375"
+
+# カテゴリー
+# 作成
+curl -X POST http://localhost:4207/authed/admin/categories \
+-H "Content-Type: application/json" \
+-H "Session-ID: 7379f26d-c80d-490f-99a9-0d74bc0b3d16" \
+-d '{
+    "name": "モヘア",
+    "content": "",
+    "status": "active",
+    "parent_id": 5
+}'
+
+# 取得
+curl -X GET http://localhost:4207/authed/admin/categories \
+-H "Content-Type: application/json" \
+-H "Session-ID: 7379f26d-c80d-490f-99a9-0d74bc0b3d16"
+
+curl -X GET http://localhost:4207/authed/admin/categories/5 \
+-H "Content-Type: application/json" \
+-H "Session-ID: 7379f26d-c80d-490f-99a9-0d74bc0b3d16"
 
 # ユーザー関連
 # ユーザーの登録

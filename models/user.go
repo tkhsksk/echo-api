@@ -6,7 +6,7 @@ import (
 
 type User struct {
 	ID        uint      `gorm:"primaryKey"`
-	Name      string    `gorm:"not null"`
+	Name      string    `gorm:"size:100;not null"`
 	Email     string    `gorm:"unique;not null"`
 	Password  string    `gorm:"not null"` // ハッシュ化されたパスワード
 	Status    string    `gorm:"default:active"` // active / suspended など

@@ -28,3 +28,21 @@ type ProductForUser struct {
     Content string  `json:"content"`
     CategoryID uint `json:"categoryID"`
 }
+
+// 管理者が商品情報取得
+type AdminResponseForAdmin struct {
+    ID     uint   `json:"id"`
+    Name   string `json:"name"`
+    Status string `json:"status"`
+}
+
+type ProductResponseForAdmin struct {
+    ID         uint    `json:"id"`
+    Name       string  `json:"name"`
+    Price      float64 `json:"price"`
+    Status     string  `json:"status"`
+    Category   string  `json:"category"`
+    Admin      AdminResponseForAdmin `json:"admin"`
+    CreatedAt  time.Time  `json:"created_at"`
+    UpdatedAt  time.Time  `json:"updated_at"`
+}

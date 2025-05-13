@@ -81,6 +81,7 @@ func main() {
 	// カテゴリー
 	admin.POST("/categories", handlers.CreateCategory) // 作成
 	admin.GET("/categories", handlers.GetCategories) // 一覧取得
+	admin.GET("/categories/tree", handlers.GetCategoriesTree) // 一覧取得
 	admin.GET("/categories/:id", handlers.GetCategoryByID) // 個別取得
 	admin.PUT("/categories/:id", handlers.UpdateCategory) // 更新
 

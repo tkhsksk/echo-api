@@ -30,11 +30,13 @@ func CreateProduct(c echo.Context) error {
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
-	// バインドした構造体に対してバリデーション実行
-	// if err := c.Validate(&req); err != nil {
-	// 	log.Println("Validation error:", err)
-	//     return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2008]})
-	// }
+
+	// カテゴリーの存在チェック
+	var category_str models.Category
+	check := db.DB.First(&category_str, req.CategoryID)
+	if check.RowsAffected == 0 {
+	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4006]})
+	}
 
 	// 投稿データ作成
 	product := models.Product{
@@ -94,7 +96,11 @@ func GetProductsForAdmin(c echo.Context) error {
 
 	// db接続
 	var products []models.Product
-	result := db.DB.Limit(limit).Find(&products)
+	result := db.DB.
+		Preload("Category").
+		Preload("Admin").
+		Limit(limit).
+		Find(&products)
 	if err := result.Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2004]})
 	}
@@ -102,9 +108,27 @@ func GetProductsForAdmin(c echo.Context) error {
 	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
 	}
 
+	var response []models.ProductResponseForAdmin
+	for _, p := range products {
+		response = append(response, models.ProductResponseForAdmin{
+			ID:       p.ID,
+			Name:     p.Name,
+			Price:    p.Price,
+			Status:   p.Status,
+			Category: p.Category.Name,
+			Admin: models.AdminResponseForAdmin{
+				ID:     p.Admin.ID,
+				Name:   p.Admin.Name,
+				Status: p.Admin.Status,
+			},
+			CreatedAt: p.CreatedAt,
+			UpdatedAt: p.UpdatedAt,
+		})
+	}
+
 	return c.JSON(http.StatusOK, echo.Map{
 		"message":  messages.Status[1005],
-		"products": products,
+		"products": response,
 	})
 }
 
@@ -113,14 +137,33 @@ func GetProductByID(c echo.Context) error {
 
 	// db接続
 	var product models.Product
-	result := db.DB.First(&product, id)
+	result := db.DB.
+		Preload("Category").
+		Preload("Admin").
+		First(&product, id)
 	if err := result.Error; err != nil {
 		return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
 	}
 
+	// 整形した構造体に詰める
+	response := models.ProductResponseForAdmin{
+		ID:       product.ID,
+		Name:     product.Name,
+		Price:    product.Price,
+		Status:   product.Status,
+		Category: product.Category.Name,
+		Admin: models.AdminResponseForAdmin{
+			ID:     product.Admin.ID,
+			Name:   product.Admin.Name,
+			Status: product.Admin.Status,
+		},
+		CreatedAt: product.CreatedAt,
+		UpdatedAt: product.UpdatedAt,
+	}
+
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": messages.Status[1005],
-		"product": result,
+		"product": response,
 	})
 }
 
@@ -137,6 +180,13 @@ func UpdateProduct(c echo.Context) error {
 	req := new(Req)
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
+	}
+
+	// カテゴリーの存在チェック
+	var category_str models.Category
+	check := db.DB.First(&category_str, req.CategoryID)
+	if check.RowsAffected == 0 {
+	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4006]})
 	}
 
 	id := c.Param("id")

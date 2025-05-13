@@ -7,7 +7,7 @@ import (
 
 type Notification struct {
     ID        uint           `gorm:"primaryKey"`
-    Title     string         `gorm:"not null"`
+    Title     string         `gorm:"size:100;not null"`
 	Content   string         `gorm:"type:text"`
 	Status    string         `gorm:"default:active"` // active / suspended など
     AdminID   uint           // 外部キー
