@@ -41,10 +41,11 @@ func main() {
     e.Use(middlewares.APILogMiddleware)
 
     // 画像登録
-    e.File("/myfont.ttf", "static/myfont.ttf")
-    e.File("/favicon.ico", "static/favicon.ico")
-    e.File("/logo.svg", "static/logo.svg")
-    e.File("/logo-dark.svg", "static/logo-dark.svg")
+    e.File("myfont", "static/myfont.ttf")
+    e.File("favicon", "static/favicon.ico")
+    e.File("logo", "static/logo.svg")
+    e.File("logo-dark", "static/logo-dark.svg")
+    e.File("bg", "static/bg.png")
 
     // データベース削除
     e.POST("/delete", db.DbDelete)

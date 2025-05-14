@@ -6,19 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>{{ .Title }}</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon">
 </head>
 
 <style>
 @font-face {
     font-family: 'MyFont';
-    src: url(/myfont.ttf);
+    src: url(myfont);
 }
 
 html {
     -webkit-text-size-adjust: 100%;
     height: 100svh;
     font-family: MyFont;
+    background-color: #f5eee4;
 }
 
 body {
@@ -31,6 +32,7 @@ main {
     height: 100%;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .mainView {
@@ -40,9 +42,9 @@ main {
 .mainView img {
     max-width: 450px;
     width: 100%;
-    margin: 0 0 2em;
+    margin: 0 0 1.5em;
     filter: none !important;
-  mix-blend-mode: normal !important;
+    mix-blend-mode: normal !important;
 }
 
 .mainView h1 {
@@ -52,15 +54,26 @@ main {
 }
 
 .mainView p {
-    font-size: 14px;
     text-align: center;
     margin: 0;
+    font-size: 1em;
+    line-height: 1.75em;
 }
 
 .mainView p span {
     font-size: 120%;
     font-weight: bold;
     margin-right: .25rem;
+}
+
+.img-cover {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  object-fit: cover;
+  object-position: center;
+  opacity: .8;
 }
 
 
@@ -70,7 +83,7 @@ main {
     }
 
     .theme-image {
-        content: url('/logo-dark.svg');
+        content: url('logo-dark');
     }
 
     p{
@@ -81,9 +94,10 @@ main {
 
 <body>
     <main>
+        <img src="bg" class="img-cover" />
         <div class="mainView">
-            <img class="theme-image" src="/logo.svg">
-            <p><span>18:00</span>まで稼働しています</p>
+            <img class="theme-image" src="logo">
+            <p>This API service is available until <span>6:00</span> PM.</p>
         </div>
     </main>
 </body>
