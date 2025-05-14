@@ -7,6 +7,7 @@ import (
 
 	"api/db"
 	"api/models"
+	"api/responses"
 	"api/middlewares"
 	"api/messages"
 )
@@ -26,9 +27,9 @@ func GetUserSessions(c echo.Context) error {
 	}
 
 	// 必要な情報だけをマッピング
-	var response []models.UserSessionResponse
+	var response []responses.UserSession
 	for _, u := range sessions {
-		response = append(response, models.UserSessionResponse{
+		response = append(response, responses.UserSession{
 			ID:        u.ID,
 			UserID:    u.UserID,
 			CreatedAt: u.CreatedAt,
@@ -59,9 +60,9 @@ func GetSessionsByUserID(c echo.Context) error {
 	}
 
 	// 必要な情報だけをマッピング
-	var response []models.UserSessionResponseByUserID
+	var response []responses.UserSessionByUserID
 	for _, u := range sessions {
-		response = append(response, models.UserSessionResponseByUserID{
+		response = append(response, responses.UserSessionByUserID{
 			ID:        u.ID,
 			CreatedAt: u.CreatedAt,
 			ExpiresAt: u.ExpiresAt,

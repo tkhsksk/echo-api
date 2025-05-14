@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"api/db"
 	"api/models"
+	"api/responses"
 	"api/middlewares"
 	"api/messages"
 )
@@ -63,9 +64,9 @@ func GetPosts(c echo.Context) error {
 	}
 
 	// 必要な情報だけをマッピング
-	var response []models.PostResponse
+	var response []responses.Post
 	for i, u := range posts {
-		response = append(response, models.PostResponse{
+		response = append(response, responses.Post{
 			ID:        uint(i+1),
 			Title:     u.Title,
 			Content:   u.Content,
@@ -102,7 +103,7 @@ func GetPostByID(c echo.Context) error {
 	}
 
 	// 必要な情報だけをマッピング
-	response := models.PostResponse{
+	response := responses.Post{
 		ID:        uint(idInt),
 		Title:     post.Title,
 		Content:   post.Content,
@@ -155,7 +156,7 @@ func UpdatePost(c echo.Context) error {
 	}
 
 	// 必要な情報だけをマッピング
-	response := models.PostResponse{
+	response := responses.Post{
 		ID:        uint(idInt),
 		Title:     post.Title,
 		Content:   post.Content,

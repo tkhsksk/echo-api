@@ -9,6 +9,7 @@ import (
 
 	"api/db"
 	"api/models"
+	"api/responses"
 	"api/messages"
 )
 
@@ -58,7 +59,7 @@ func AdminPasscodes(c echo.Context) error {
 	if err := db.DB.First(&admin, uint(adminID)).Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[4002]})
 	}
-	response := models.AdminResponse{
+	response := responses.Admin{
 		ID:        admin.ID,
 		Name:      admin.Name,
 		Email:     admin.Email,

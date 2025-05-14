@@ -23,20 +23,3 @@ type Category struct {
     UpdatedAt time.Time
     DeletedAt gorm.DeletedAt `gorm:"index"`
 }
-
-type CategoryResponse struct {
-    ID         uint    `json:"id"`
-    Name       string  `json:"name"`
-    Status     string  `json:"status"`
-    ParentID   *uint    `json:"parent_id"`
-    Admin      AdminResponseForAdmin `json:"admin"`
-    CreatedAt  time.Time  `json:"created_at"`
-    UpdatedAt  time.Time  `json:"updated_at"`
-}
-
-type CategoryTreeResponse struct {
-    ID       uint                   `json:"id"`
-    Name     string                 `json:"name"`
-    Status   string                 `json:"status"`
-    Children []CategoryTreeResponse `json:"children"`
-}

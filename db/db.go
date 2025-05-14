@@ -51,6 +51,7 @@ func Init() {
 		&models.Product{},
 		&models.Category{},
 		&models.Notification{},
+		&models.Image{},
 	); err != nil {
 		log.Fatalf("マイグレーション失敗: %v", err)
 	}

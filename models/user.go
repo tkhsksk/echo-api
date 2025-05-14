@@ -16,12 +16,3 @@ type User struct {
 	Posts        []Post        `gorm:"foreignKey:UserID"`
 	UserSessions []UserSession `gorm:"foreignKey:UserID"`
 }
-
-type UserResponse struct {
-	ID        uint   `json:"id"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	Status    string `json:"status"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}

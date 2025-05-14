@@ -70,6 +70,7 @@ func DbDelete(c echo.Context) error {
 		"products",
 		"categories",
 		"notifications",
+		"images",
 	}
 
 	// 各テーブルに対して TRUNCATE を実行

@@ -7,6 +7,7 @@ import (
 
 	"api/db"
 	"api/models"
+	"api/responses"
 	"api/middlewares"
 	"api/messages"
 )
@@ -26,9 +27,9 @@ func GetUsers(c echo.Context) error {
 	}
 
 	// 必要な情報だけをマッピング
-	var response []models.UserResponse
+	var response []responses.User
 	for _, u := range users {
-		response = append(response, models.UserResponse{
+		response = append(response, responses.User{
 			ID:        u.ID,
 			Name:      u.Name,
 			Email:     u.Email,
@@ -55,7 +56,7 @@ func GetUserByID(c echo.Context) error {
 	}
 
 	// 必要な情報だけをマッピング
-	response := models.UserResponse{
+	response := responses.User{
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
@@ -74,7 +75,7 @@ func GetUserProfile(c echo.Context) error {
 	user := c.Get("user").(models.User)
 
 	// 必要な情報だけをマッピング
-	response := models.UserResponse{
+	response := responses.User{
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,

@@ -66,12 +66,12 @@ curl -X POST http://localhost:4207/auth/admin/register \
 }'
 
 # 管理者ログイン
-curl -X POST http://localhost:4207/auth/admin/login \
+curl -s -X POST http://localhost:4207/auth/admin/login \
 -H "Content-Type: application/json" \
 -d '{
     "email": "tkhsksk0318@gmail.com",
     "password": "Password123"
-}'
+}' | jq
 
 # ユーザーの取得
 curl -X GET http://localhost:4207/authed/admin/users \
@@ -90,26 +90,38 @@ curl -X GET http://localhost:4207/authed/admin/users/sessions \
 
 # 商品
 # 作成
-curl -X POST http://localhost:4207/authed/admin/products \
+curl -s -X POST http://localhost:4207/authed/admin/products \
 -H "Content-Type: application/json" \
--H "Session-ID: 4b5de801-f6aa-4241-9fb2-943b88669375" \
+-H "Session-ID: 1f8a6d75-a555-4fda-8ce6-2548e9f328b3" \
 -d '{
-    "name": "テスト商品",
-    "price": 1200,
+    "name": "ジャケット赤",
+    "price": 12800,
     "content": "",
     "status": "active",
-    "category_id": 1
-}'
+    "category_id": 3
+}' | jq
 
 # 取得
 curl -X GET http://localhost:4207/authed/admin/products/3 \
 -H "Content-Type: application/json" \
--H "Session-ID: 4b5de801-f6aa-4241-9fb2-943b88669375"
+-H "Session-ID: 1f8a6d75-a555-4fda-8ce6-2548e9f328b3" | jq
 
 # 一覧取得
-curl -X GET http://localhost:4207/authed/admin/products \
+curl -s -X GET http://localhost:4207/authed/admin/products \
 -H "Content-Type: application/json" \
--H "Session-ID: 4b5de801-f6aa-4241-9fb2-943b88669375"
+-H "Session-ID: 1f8a6d75-a555-4fda-8ce6-2548e9f328b3" | jq
+
+# 更新
+curl -X PUT http://localhost:4207/authed/admin/products/6 \
+-H "Content-Type: application/json" \
+-H "Session-ID: 1f8a6d75-a555-4fda-8ce6-2548e9f328b3" \
+-d '{
+    "name": "ジャケット黒",
+    "price": 12800,
+    "content": "",
+    "status": "suspended",
+    "category_id": 3
+}' | jq
 
 # カテゴリー
 # 作成
@@ -124,13 +136,28 @@ curl -X POST http://localhost:4207/authed/admin/categories \
 }'
 
 # 取得
+curl -X GET http://localhost:4207/authed/admin/categories/tree \
+-H "Content-Type: application/json" \
+-H "Session-ID: 3e2db53f-1d40-4572-99a3-4a49728461dd"
+
 curl -X GET http://localhost:4207/authed/admin/categories \
 -H "Content-Type: application/json" \
--H "Session-ID: 7379f26d-c80d-490f-99a9-0d74bc0b3d16"
+-H "Session-ID: 3e2db53f-1d40-4572-99a3-4a49728461dd"
 
-curl -X GET http://localhost:4207/authed/admin/categories/5 \
+curl -X GET http://localhost:4207/authed/admin/categories/7 \
 -H "Content-Type: application/json" \
--H "Session-ID: 7379f26d-c80d-490f-99a9-0d74bc0b3d16"
+-H "Session-ID: 3e2db53f-1d40-4572-99a3-4a49728461dd"
+
+# 更新
+curl -X PUT http://localhost:4207/authed/admin/categories/7 \
+-H "Content-Type: application/json" \
+-H "Session-ID: 3e2db53f-1d40-4572-99a3-4a49728461dd" \
+-d '{
+    "name": "スポーツ",
+    "content": "",
+    "status": "active",
+    "parent_id": 1
+}'
 
 # ユーザー関連
 # ユーザーの登録
@@ -150,7 +177,19 @@ curl -X POST http://localhost:4207/auth/user/login \
     "password": "Password123"
 }'
 
-# ポストの登録
+# 商品
+# 取得
+curl -X GET http://localhost:4207/authed/user/products/7 \
+-H "Content-Type: application/json" \
+-H "Session-ID: 6c83928f-26fc-483c-a19a-7b5d2d96feee" | jq
+
+# 一覧取得
+curl -X GET http://localhost:4207/authed/user/products \
+-H "Content-Type: application/json" \
+-H "Session-ID: 6c83928f-26fc-483c-a19a-7b5d2d96feee" | jq
+
+# ポスト
+# 登録
 curl -X POST http://localhost:4207/authed/user/posts \
 -H "Content-Type: application/json" \
 -H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a" \
@@ -159,7 +198,7 @@ curl -X POST http://localhost:4207/authed/user/posts \
 	"content": "これはテスト投稿の内容です"
 }'
 
-# ポストの更新
+# 更新
 curl -X PUT http://localhost:4207/authed/user/posts/1 \
 -H "Content-Type: application/json" \
 -H "Session-ID: [ユーザーセッション]" \
@@ -168,12 +207,12 @@ curl -X PUT http://localhost:4207/authed/user/posts/1 \
 	"content": "これはテスト投稿の内容ですedit"
 }'
 
-# ポストの取得
+# 取得
 curl -X GET http://localhost:4207/authed/user/posts \
 -H "Content-Type: application/json" \
 -H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a"
 
-# 個別ポストの取得
+# 個別取得
 curl -X GET http://localhost:4207/authed/user/posts/1 \
 -H "Content-Type: application/json" \
 -H "Session-ID: a55fab5b-7e51-4f87-8a94-a87f9d5f671b"

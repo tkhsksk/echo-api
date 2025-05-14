@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"api/db"
 	"api/models"
+	"api/responses"
 	"api/middlewares"
 	"api/messages"
 )
@@ -58,12 +59,12 @@ func CreateCategory(c echo.Context) error {
 	}
 
 	// api用に整形した構造体に詰める
-	response := models.CategoryResponse{
+	response := responses.Category{
 		ID:       category.ID,
 		Name:     category.Name,
 		Status:   category.Status,
 		ParentID: category.ParentID,
-		Admin: models.AdminResponseForAdmin{
+		Admin: responses.AdminSummary{
 			ID:     category.Admin.ID,
 			Name:   category.Admin.Name,
 			Status: category.Admin.Status,
@@ -92,14 +93,14 @@ func GetCategories(c echo.Context) error {
 	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
 	}
 
-	var response []models.CategoryResponse
+	var response []responses.Category
 	for _, c := range categories {
-		response = append(response, models.CategoryResponse{
+		response = append(response, responses.Category{
 			ID:       c.ID,
 			Name:     c.Name,
 			Status:   c.Status,
 			ParentID: c.ParentID,
-			Admin: models.AdminResponseForAdmin{
+			Admin: responses.AdminSummary{
 				ID:     c.Admin.ID,
 				Name:   c.Admin.Name,
 				Status: c.Admin.Status,
@@ -130,13 +131,13 @@ func GetCategoriesTree(c echo.Context) error {
 }
 
 // 再帰的にカテゴリーのツリーを構築
-func buildCategoryTree(categories []models.Category, parentID *uint) []models.CategoryTreeResponse {
-    var tree []models.CategoryTreeResponse
+func buildCategoryTree(categories []models.Category, parentID *uint) []responses.CategoryTree {
+    var tree []responses.CategoryTree
     for _, category := range categories {
         if (category.ParentID == nil && parentID == nil) || (category.ParentID != nil && parentID != nil && *category.ParentID == *parentID) {
             // 再帰的に子供を取得
             children := buildCategoryTree(categories, &category.ID)
-            node := models.CategoryTreeResponse{
+            node := responses.CategoryTree{
                 ID:       category.ID,
                 Name:     category.Name,
                 Status:   category.Status,
@@ -151,20 +152,40 @@ func buildCategoryTree(categories []models.Category, parentID *uint) []models.Ca
 func GetCategoryByID(c echo.Context) error {
 	id := c.Param("id")
 
-	// db接続
+	// 指定されたカテゴリ取得
 	var category models.Category
 	result := db.DB.Preload("Admin").First(&category, id)
 	if err := result.Error; err != nil {
 		return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
 	}
 
-	// 整形した構造体に詰める
-	response := models.CategoryResponse{
+	// 親カテゴリを辿る
+	var parentChain []map[string]interface{}
+	currentParentID := category.ParentID
+
+	for currentParentID != nil {
+		var parent models.Category
+		if err := db.DB.First(&parent, *currentParentID).Error; err != nil {
+			break // 途中で見つからなければ終了
+		}
+
+		parentChain = append([]map[string]interface{}{ // prepend する
+			{
+				"id":   parent.ID,
+				"name": parent.Name,
+			},
+		}, parentChain...)
+
+		currentParentID = parent.ParentID
+	}
+
+	// レスポンス構造体に詰める
+	response := responses.Category{
 		ID:       category.ID,
 		Name:     category.Name,
 		Status:   category.Status,
 		ParentID: category.ParentID,
-		Admin: models.AdminResponseForAdmin{
+		Admin: responses.AdminSummary{
 			ID:     category.Admin.ID,
 			Name:   category.Admin.Name,
 			Status: category.Admin.Status,
@@ -174,10 +195,12 @@ func GetCategoryByID(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"message":  messages.Status[1005],
-		"category": response,
+		"message":          messages.Status[1005],
+		"category":         response,
+		"parent_hierarchy": parentChain,
 	})
 }
+
 
 func UpdateCategory(c echo.Context) error {
 	// 投稿内容を受け取る構造体

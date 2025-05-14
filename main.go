@@ -67,6 +67,7 @@ func main() {
 
 	// 商品
 	user.GET("/products", handlers.GetProductsForUser) // 一覧取得
+	user.GET("/products/:id", handlers.GetProductForUserByID) // 商品個別取得
 
 	user.GET("/profiles", handlers.GetUserProfile) // プロフィール取得
 
@@ -85,9 +86,10 @@ func main() {
 	admin.GET("/categories/:id", handlers.GetCategoryByID) // 個別取得
 	admin.PUT("/categories/:id", handlers.UpdateCategory) // 更新
 
+	// 商品
 	admin.POST("/products", handlers.CreateProduct) // 商品作成
 	admin.GET("/products", handlers.GetProductsForAdmin) // 商品一覧取得
-	admin.GET("/products/:id", handlers.GetProductByID) // 商品個別取得
+	admin.GET("/products/:id", handlers.GetProductForAdminByID) // 商品個別取得
 	admin.PUT("/products/:id", handlers.UpdateProduct) // 商品更新
 
 	admin.GET("/profiles", handlers.GetAdminProfile) // プロフィール取得

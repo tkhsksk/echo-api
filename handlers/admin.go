@@ -7,6 +7,7 @@ import (
 
 	// "api/db"
 	"api/models"
+	"api/responses"
 	// "api/middlewares"
 	"api/messages"
 )
@@ -15,7 +16,7 @@ func GetAdminProfile(c echo.Context) error {
 	admin := c.Get("admin").(models.Admin)
 
 	// 必要な情報だけをマッピング
-	response := models.AdminResponse{
+	response := responses.Admin{
 		ID:        admin.ID,
 		Name:      admin.Name,
 		Email:     admin.Email,

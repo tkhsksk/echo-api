@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"api/db"
 	"api/models"
+	"api/responses"
 	"api/middlewares"
 	"api/messages"
 )
@@ -52,10 +53,17 @@ func CreateProduct(c echo.Context) error {
 	if err := db.DB.Create(&product).Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
+	// Admin,Category取得用に再読み込み
+	if err := db.DB.Preload("Admin").Preload("Category").First(&product, product.ID).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2004]})
+	}
+
+	// 整形した構造体に詰める
+	response := responses.NewProductForAdmin(product)
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": messages.Status[1001],
-		"product": product,
+		"product": response,
 	})
 }
 
@@ -65,7 +73,7 @@ func GetProductsForUser(c echo.Context) error {
 
 	// db接続
 	var products []models.Product
-	result := db.DB.Limit(limit).Find(&products)
+	result := db.DB.Limit(limit).Where("status = ?", "active").Find(&products)
 	if err := result.Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2004]})
 	}
@@ -73,9 +81,9 @@ func GetProductsForUser(c echo.Context) error {
 	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
 	}
 
-	var response []models.ProductForUser
+	var response []responses.ProductForUser
     for _, p := range products {
-        response = append(response, models.ProductForUser{
+        response = append(response, responses.ProductForUser{
             ID:    		p.ID,
             Name:  		p.Name,
             Price: 		p.Price,
@@ -108,22 +116,9 @@ func GetProductsForAdmin(c echo.Context) error {
 	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
 	}
 
-	var response []models.ProductResponseForAdmin
+	var response []responses.ProductForAdmin
 	for _, p := range products {
-		response = append(response, models.ProductResponseForAdmin{
-			ID:       p.ID,
-			Name:     p.Name,
-			Price:    p.Price,
-			Status:   p.Status,
-			Category: p.Category.Name,
-			Admin: models.AdminResponseForAdmin{
-				ID:     p.Admin.ID,
-				Name:   p.Admin.Name,
-				Status: p.Admin.Status,
-			},
-			CreatedAt: p.CreatedAt,
-			UpdatedAt: p.UpdatedAt,
-		})
+		response = append(response, responses.NewProductForAdmin(p))
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
@@ -132,7 +127,33 @@ func GetProductsForAdmin(c echo.Context) error {
 	})
 }
 
-func GetProductByID(c echo.Context) error {
+func GetProductForUserByID(c echo.Context) error {
+	id := c.Param("id")
+
+	// db接続
+	var product models.Product
+	result := db.DB.
+		Where("id = ? AND status = ?", id, "active").
+		First(&product)
+	if err := result.Error; err != nil {
+		return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
+	}
+
+	// 整形した構造体に詰める
+	response := responses.ProductForUser{
+		ID:       product.ID,
+		Name:     product.Name,
+		Price:    product.Price,
+		CategoryID: product.Category.ID,
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1005],
+		"product": response,
+	})
+}
+
+func GetProductForAdminByID(c echo.Context) error {
 	id := c.Param("id")
 
 	// db接続
@@ -146,20 +167,7 @@ func GetProductByID(c echo.Context) error {
 	}
 
 	// 整形した構造体に詰める
-	response := models.ProductResponseForAdmin{
-		ID:       product.ID,
-		Name:     product.Name,
-		Price:    product.Price,
-		Status:   product.Status,
-		Category: product.Category.Name,
-		Admin: models.AdminResponseForAdmin{
-			ID:     product.Admin.ID,
-			Name:   product.Admin.Name,
-			Status: product.Admin.Status,
-		},
-		CreatedAt: product.CreatedAt,
-		UpdatedAt: product.UpdatedAt,
-	}
+	response := responses.NewProductForAdmin(product)
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": messages.Status[1005],
@@ -220,8 +228,16 @@ func UpdateProduct(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2005]})
 	}
 
+	// Admin,Category取得用に再読み込み
+	if err := db.DB.Preload("Admin").Preload("Category").First(&product, product.ID).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2004]})
+	}
+
+	// 整形した構造体に詰める
+	response := responses.NewProductForAdmin(product)
+
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": messages.Status[1002],
-		"product": product,
+		"product": response,
 	})
 }
