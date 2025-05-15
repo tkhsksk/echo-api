@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"log"
 
 	"github.com/labstack/echo/v4"
 
@@ -83,6 +84,8 @@ func GetUserProfile(c echo.Context) error {
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
+
+	log.Println("ユーザープロフィール取得成功:", user.ID)
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": messages.Status[1005],

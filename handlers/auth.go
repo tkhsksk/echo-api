@@ -124,6 +124,8 @@ func UserRegister(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
 
+	log.Println("ユーザー登録成功:", user.ID)
+
 	return c.JSON(http.StatusCreated, echo.Map{"message": messages.Status[1001]})
 }
 
@@ -171,6 +173,8 @@ func UserLogin(c echo.Context) error {
 		HttpOnly: true,
 		MaxAge:   86400,
 	})
+
+	log.Println("ユーザーログイン成功:", user.ID)
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"message":    messages.Status[1000],

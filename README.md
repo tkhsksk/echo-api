@@ -220,7 +220,7 @@ curl -X GET http://localhost:4207/authed/user/posts/1 \
 # プロフィール取得
 curl -X GET http://localhost:4207/authed/user/profiles \
 -H "Content-Type: application/json" \
--H "Session-ID: 6ee62750-6276-44f7-b3ee-14f66632027a"
+-H "Session-ID: 45a55ea3-0ec3-470a-ad1d-b2925ba9289d"
 
 # データベースのリセット
 curl -X POST http://localhost:4207/delete \
