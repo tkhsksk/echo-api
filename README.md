@@ -217,10 +217,19 @@ curl -X GET http://localhost:4207/authed/user/posts/1 \
 -H "Content-Type: application/json" \
 -H "Session-ID: a55fab5b-7e51-4f87-8a94-a87f9d5f671b"
 
-# プロフィール取得
+# プロフィール
+# 取得
 curl -X GET http://localhost:4207/authed/user/profiles \
 -H "Content-Type: application/json" \
--H "Session-ID: 45a55ea3-0ec3-470a-ad1d-b2925ba9289d"
+-H "Session-ID: c4278f0b-f9e0-4c21-9415-7ccf665820f3"
+
+# 更新
+curl -X PUT http://localhost:4207/authed/user/profiles \
+-H "Content-Type: application/json" \
+-H "Session-ID: c4278f0b-f9e0-4c21-9415-7ccf665820f3" \
+-d '{
+    "name": "テスト投稿edit"
+}'
 
 # データベースのリセット
 curl -X POST http://localhost:4207/delete \

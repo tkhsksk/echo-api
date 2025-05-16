@@ -70,7 +70,9 @@ func main() {
 	user.GET("/products", handlers.GetProductsForUser) // 一覧取得
 	user.GET("/products/:id", handlers.GetProductForUserByID) // 商品個別取得
 
-	user.GET("/profiles", handlers.GetUserProfile) // プロフィール取得
+	// プロフィール
+	user.GET("/profiles", handlers.GetUserProfile) // 取得
+	user.PUT("/profiles", handlers.UpdateUserProfile) // 更新
 
 	// 管理者
 	admin := e.Group("/authed/admin", middlewares.IsAuthenticatedAdmin)

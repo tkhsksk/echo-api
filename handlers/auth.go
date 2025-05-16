@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 	"time"
-	"log"
 
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -14,6 +13,7 @@ import (
 	"api/mailer"
 	"api/middlewares"
 	"api/messages"
+	"api/utils"
 )
 
 // 管理者登録
@@ -73,7 +73,7 @@ func AdminRegister(c echo.Context) error {
 	go func() {
 		err := mailer.SendPasscodeMail(req.Email, passcode.Code, admin.ID, passcode.ID)
 		if err != nil {
-			log.Println("メール送信失敗:", err)
+			utils.LogRequest(c, 002, "メール送信失敗")
 		}
 	}()
 
@@ -124,7 +124,7 @@ func UserRegister(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
 
-	log.Println("ユーザー登録成功:", user.ID)
+	utils.LogRequest(c, 003, "ユーザー登録成功")
 
 	return c.JSON(http.StatusCreated, echo.Map{"message": messages.Status[1001]})
 }
@@ -174,7 +174,7 @@ func UserLogin(c echo.Context) error {
 		MaxAge:   86400,
 	})
 
-	log.Println("ユーザーログイン成功:", user.ID)
+	utils.LogRequest(c, 003, "ユーザーログイン成功")
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"message":    messages.Status[1000],

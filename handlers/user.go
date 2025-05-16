@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"log"
 
 	"github.com/labstack/echo/v4"
 
@@ -72,23 +71,3 @@ func GetUserByID(c echo.Context) error {
 	})
 }
 
-func GetUserProfile(c echo.Context) error {
-	user := c.Get("user").(models.User)
-
-	// 必要な情報だけをマッピング
-	response := responses.User{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		Status:    user.Status,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}
-
-	log.Println("ユーザープロフィール取得成功:", user.ID)
-
-	return c.JSON(http.StatusOK, echo.Map{
-		"message": messages.Status[1005],
-		"user":    response,
-	})
-}
