@@ -8,7 +8,7 @@ import (
 	"api/db"
 	"api/models"
 	"api/responses"
-	"api/middlewares"
+	"api/utils"
 	"api/messages"
 )
 
@@ -49,7 +49,7 @@ func CreatePost(c echo.Context) error {
 // 自身が登録した投稿一覧取得
 func GetPosts(c echo.Context) error {
 	// デフォルト 100 件 上限1000（DoS対策）
-	limit := middlewares.ParseLimitParam(c, 100, 1000)
+	limit := utils.ParseLimitParam(c, 100, 1000)
 	user := c.Get("user").(models.User)
 
 	// db接続

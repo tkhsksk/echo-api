@@ -38,7 +38,7 @@ func main() {
         return c.Render(http.StatusOK, "index.html", data)
     })
     // ログ保存
-    e.Use(middlewares.APILogMiddleware)
+    e.Use(middlewares.APILog)
 
     // 画像登録
     e.File("myfont", "static/myfont.ttf")

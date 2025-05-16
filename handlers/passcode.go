@@ -11,6 +11,7 @@ import (
 	"api/models"
 	"api/responses"
 	"api/messages"
+	"api/middlewares"
 )
 
 // パスコード認証
@@ -36,11 +37,11 @@ func AdminPasscodes(c echo.Context) error {
 	}
 
 	if passcode.AdminID != uint(adminID) {
-	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[7001],})
+	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[7001]})
 	}
 
-	if passcode.Code != req.Passcode {
-	    return c.JSON(http.StatusUnauthorized, echo.Map{"message": messages.Status[7002],})
+	if !middlewares.ComparePasscode(passcode.Code, req.Passcode) {
+	    return c.JSON(http.StatusUnauthorized, echo.Map{"message": messages.Status[7002]})
 	}
 
 	// パスコードの有効期限チェック

@@ -8,7 +8,7 @@ import (
 	"api/db"
 	"api/models"
 	"api/responses"
-	"api/middlewares"
+	"api/utils"
 	"api/messages"
 )
 
@@ -81,7 +81,7 @@ func CreateCategory(c echo.Context) error {
 
 func GetCategories(c echo.Context) error {
 	// デフォルト 100 件 上限1000（DoS対策）
-	limit := middlewares.ParseLimitParam(c, 100, 1000)
+	limit := utils.ParseLimitParam(c, 100, 1000)
 
 	// db接続
 	var categories []models.Category

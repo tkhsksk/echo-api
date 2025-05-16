@@ -21,7 +21,7 @@ func (w *responseCaptureWriter) Write(b []byte) (int, error) {
 	return w.ResponseWriter.Write(b) // 実際のレスポンスにも書き出す
 }
 
-func APILogMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+func APILog(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		req := c.Request()
 		res := c.Response()

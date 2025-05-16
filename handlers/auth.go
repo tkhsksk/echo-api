@@ -11,7 +11,6 @@ import (
 	"api/db"
 	"api/models"
 	"api/mailer"
-	"api/middlewares"
 	"api/messages"
 	"api/utils"
 )
@@ -29,15 +28,15 @@ func AdminRegister(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
 
-	if !middlewares.ValidateName(req.Name) {
+	if !utils.ValidateName(req.Name) {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5002]})
 	}
 
-	if !middlewares.ValidateEmail(req.Email) {
+	if !utils.ValidateEmail(req.Email) {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5000]})
 	}
 
-	if !middlewares.ValidatePassword(req.Password) {
+	if !utils.ValidatePassword(req.Password) {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5001]})
 	}
 
@@ -60,18 +59,25 @@ func AdminRegister(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2002]})
 	}
 
+	// パスコードのハッシュ化
+	passcode := utils.GenerateUnique6DigitCode()
+	hashedPasscode, err := utils.HashPasscode(passcode)
+	if err != nil {
+	    utils.LogRequest(c, 004, "ハッシュ化失敗")
+	}
+
 	// パスコード作成
-	passcode := models.Passcode{
+	passcode_model := models.Passcode{
 		AdminID:   admin.ID,
-		Code:	   middlewares.GenerateUnique6DigitCode(),
+		Code:	   hashedPasscode,
 		ExpiresAt: time.Now().Add(1 * time.Hour), // 1時間有効
 	}
-	if err := db.DB.Create(&passcode).Error; err != nil {
+	if err := db.DB.Create(&passcode_model).Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2001]})
 	}
 	// 非同期メール送信
 	go func() {
-		err := mailer.SendPasscodeMail(req.Email, passcode.Code, admin.ID, passcode.ID)
+		err := mailer.SendPasscodeMail(req.Email, passcode, admin.ID, passcode_model.ID)
 		if err != nil {
 			utils.LogRequest(c, 002, "メール送信失敗")
 		}
@@ -93,15 +99,15 @@ func UserRegister(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
 
-	if !middlewares.ValidateName(req.Name) {
+	if !utils.ValidateName(req.Name) {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5002]})
 	}
 
-	if !middlewares.ValidateEmail(req.Email) {
+	if !utils.ValidateEmail(req.Email) {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5000]})
 	}
 
-	if !middlewares.ValidatePassword(req.Password) {
+	if !utils.ValidatePassword(req.Password) {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[5001]})
 	}
 

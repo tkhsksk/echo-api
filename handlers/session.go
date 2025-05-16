@@ -8,13 +8,13 @@ import (
 	"api/db"
 	"api/models"
 	"api/responses"
-	"api/middlewares"
+	"api/utils"
 	"api/messages"
 )
 
 func GetUserSessions(c echo.Context) error {
 	// デフォルト 100 件 上限1000（DoS対策）
-	limit := middlewares.ParseLimitParam(c, 100, 1000)
+	limit := utils.ParseLimitParam(c, 100, 1000)
 
 	// db接続
 	var sessions []models.UserSession
@@ -45,7 +45,7 @@ func GetUserSessions(c echo.Context) error {
 
 func GetSessionsByUserID(c echo.Context) error {
 	// デフォルト 100 件 上限1000（DoS対策）
-	limit := middlewares.ParseLimitParam(c, 100, 1000)
+	limit := utils.ParseLimitParam(c, 100, 1000)
 	// urlからid取得
 	id := c.Param("id")
 

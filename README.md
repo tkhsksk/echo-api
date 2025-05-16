@@ -61,7 +61,7 @@ curl -X POST http://localhost:4207/auth/admin/register \
 -H "Content-Type: application/json" \
 -d '{
 	"name": "takahshi",
-	"email": "user+001@example.com",
+	"email": "tkhsksk0318@example.com",
 	"password": "Password123"
 }'
 
@@ -69,7 +69,7 @@ curl -X POST http://localhost:4207/auth/admin/register \
 curl -s -X POST http://localhost:4207/auth/admin/login \
 -H "Content-Type: application/json" \
 -d '{
-    "email": "tkhsksk0318@gmail.com",
+    "email": "tkhsksk0318@example.com",
     "password": "Password123"
 }' | jq
 
