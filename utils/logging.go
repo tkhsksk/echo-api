@@ -21,3 +21,21 @@ func LogRequest(c echo.Context, level int, msg string) {
 
     log.Println(color + "[" + method + " -> " + path + "]:" + reset + msg)
 }
+
+
+var RejectedPath = []string{
+    "/.env",
+    "/robots.txt",
+    "/config.json",
+    "/sitemap.xml",
+    "/.env.dist",
+    "/.git/config ",
+    "/geoserver/web/",
+    "/.git/refs/heads/",
+    "/config.yaml",
+    "/test.php",
+    "/test",
+    "/config.js",
+    "/phpinfo.php",
+    "/app.js",
+}

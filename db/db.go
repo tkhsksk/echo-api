@@ -48,6 +48,7 @@ func Init() {
 		&models.Post{},
 		&models.Passcode{},
 		&models.APILog{},
+		&models.BlockLog{},
 		&models.Product{},
 		&models.Category{},
 		&models.Notification{},

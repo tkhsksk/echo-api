@@ -67,6 +67,7 @@ func DbDelete(c echo.Context) error {
 		"posts",
 		"passcodes",
 		"api_logs",
+		"block_Logs",
 		"products",
 		"categories",
 		"notifications",

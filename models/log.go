@@ -13,3 +13,10 @@ type APILog struct {
 	CreatedAt time.Time
 }
 
+type BlockLog struct {
+	ID        uint      `gorm:"primaryKey"`
+	ClientIP  string
+	Path      string
+	CreatedAt time.Time
+}
+

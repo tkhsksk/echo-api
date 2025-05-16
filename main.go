@@ -37,8 +37,11 @@ func main() {
         }
         return c.Render(http.StatusOK, "index.html", data)
     })
+    // ip制限
+    e.Use(middlewares.BlockIPMiddleware)
     // ログ保存
     e.Use(middlewares.APILog)
+    e.Use(middlewares.BlockedIPLog)
 
     // 画像登録
     e.File("myfont", "static/myfont.ttf")

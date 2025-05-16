@@ -3,10 +3,12 @@ package middlewares
 import (
 	"bytes"
 	"encoding/json"
+	"log"
 
 	"net/http"
 	"api/db"
 	"api/models"
+	"api/utils"
 
 	"github.com/labstack/echo/v4"
 )
@@ -55,6 +57,35 @@ func APILog(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 			db.DB.Create(&log)
 		}()
+
+		return err
+	}
+}
+
+
+func BlockedIPLog(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		req := c.Request()
+		err := next(c)
+
+		// チェック対象パスの配列を作成
+		targetPaths := utils.RejectedPath
+
+		// リクエストのパスが対象のパスの中にあるかをチェック
+		for _, path := range targetPaths {
+			if req.URL.Path == path {
+				// 非同期でログ保存
+				go func() {
+					blockLog := models.BlockLog{
+						ClientIP: c.RealIP(),
+						Path:     req.URL.Path,
+					}
+					if err := db.DB.Create(&blockLog).Error; err != nil {
+						log.Println("Error saving API log:", err)
+					}
+				}()
+			}
+		}
 
 		return err
 	}

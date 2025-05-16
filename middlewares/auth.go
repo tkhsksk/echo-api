@@ -87,4 +87,24 @@ func IsAuthenticatedAdmin(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+func BlockIPMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ip := c.RealIP()
 
+		var count int64
+		// IP がブロックテーブルに存在するかチェック
+		if err := db.DB.
+			Model(&models.BlockLog{}).
+			Where("client_ip = ?", ip).
+			Count(&count).Error; err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "DB error")
+		}
+
+		if count > 0 {
+			return echo.NewHTTPError(http.StatusForbidden, "Access denied")
+		}
+
+		// 問題なければ次へ
+		return next(c)
+	}
+}
