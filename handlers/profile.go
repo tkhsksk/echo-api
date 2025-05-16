@@ -12,6 +12,25 @@ import (
 	"api/utils"
 )
 
+func GetAdminProfile(c echo.Context) error {
+	admin := c.Get("admin").(models.Admin)
+
+	// 必要な情報だけをマッピング
+	response := responses.Admin{
+		ID:        admin.ID,
+		Name:      admin.Name,
+		Email:     admin.Email,
+		Status:    admin.Status,
+		CreatedAt: admin.CreatedAt,
+		UpdatedAt: admin.UpdatedAt,
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": messages.Status[1005],
+		"admin":   response,
+	})
+}
+
 func GetUserProfile(c echo.Context) error {
 	user := c.Get("user").(models.User)
 
