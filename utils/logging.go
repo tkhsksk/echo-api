@@ -29,7 +29,7 @@ var RejectedPath = []string{
     "/config.json",
     "/sitemap.xml",
     "/.env.dist",
-    "/.git/config ",
+    "/.git/config",
     "/geoserver/web/",
     "/.git/refs/heads/",
     "/config.yaml",
@@ -38,4 +38,6 @@ var RejectedPath = []string{
     "/config.js",
     "/phpinfo.php",
     "/app.js",
+    "/hello.world",
+    "/index.php",
 }
