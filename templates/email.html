@@ -13,7 +13,7 @@
       curl -X POST {{.Url}}/passcode/{{.CodeId}}/{{.UserId}} \<br />
       -H "Content-Type: application/json" \<br />
       -d '{<br />
-          "passcode": "送られてきたパスコード"<br />
+          "passcode": "{{.Code}}"<br />
       }'
   </code>
   </div>

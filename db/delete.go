@@ -27,7 +27,7 @@ func DbDelete(c echo.Context) error {
     }
 
     // パスワード認証
-    if os.Getenv("DB_DELETE_PASS") != req.Password {
+    if os.Getenv("BASE_PASS") != req.Password {
 	    return c.JSON(http.StatusUnauthorized, echo.Map{"message": messages.Status[2003],})
 	}
 

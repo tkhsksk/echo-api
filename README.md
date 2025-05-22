@@ -74,9 +74,14 @@ curl -s -X POST http://localhost:4207/auth/admin/login \
 }' | jq
 
 # ユーザーの取得
-curl -X GET http://localhost:4207/authed/admin/users \
+curl -X GET "http://localhost:4207/authed/admin/users" \
 -H "Content-Type: application/json" \
--H "Session-ID: 538e54d0-0e21-4222-9d12-55845e573f2f"
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" | jq
+
+# limit指定してユーザーの取得
+curl -X GET "http://localhost:4207/authed/admin/users?limit=2" \
+-H "Content-Type: application/json" \
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" | jq
 
 # 個別ユーザーの取得
 curl -X GET http://localhost:4207/authed/admin/users/5 \
@@ -92,7 +97,7 @@ curl -X GET http://localhost:4207/authed/admin/users/sessions \
 # 作成
 curl -s -X POST http://localhost:4207/authed/admin/products \
 -H "Content-Type: application/json" \
--H "Session-ID: 1f8a6d75-a555-4fda-8ce6-2548e9f328b3" \
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" \
 -d '{
     "name": "ジャケット赤",
     "price": 12800,
@@ -109,7 +114,7 @@ curl -X GET http://localhost:4207/authed/admin/products/3 \
 # 一覧取得
 curl -s -X GET http://localhost:4207/authed/admin/products \
 -H "Content-Type: application/json" \
--H "Session-ID: 1f8a6d75-a555-4fda-8ce6-2548e9f328b3" | jq
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" | jq
 
 # 更新
 curl -X PUT http://localhost:4207/authed/admin/products/6 \
@@ -127,37 +132,39 @@ curl -X PUT http://localhost:4207/authed/admin/products/6 \
 # 作成
 curl -X POST http://localhost:4207/authed/admin/categories \
 -H "Content-Type: application/json" \
--H "Session-ID: 7379f26d-c80d-490f-99a9-0d74bc0b3d16" \
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" \
 -d '{
-    "name": "モヘア",
+    "name": "ボトムス",
     "content": "",
     "status": "active",
-    "parent_id": 5
-}'
+    "parent_id": 2
+}' | jq
 
-# 取得
+# ツリー取得
 curl -X GET http://localhost:4207/authed/admin/categories/tree \
 -H "Content-Type: application/json" \
--H "Session-ID: 3e2db53f-1d40-4572-99a3-4a49728461dd"
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" | jq
 
+# 全取得
 curl -X GET http://localhost:4207/authed/admin/categories \
 -H "Content-Type: application/json" \
--H "Session-ID: 3e2db53f-1d40-4572-99a3-4a49728461dd"
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" | jq
 
-curl -X GET http://localhost:4207/authed/admin/categories/7 \
+# id指定取得
+curl -X GET http://localhost:4207/authed/admin/categories/4 \
 -H "Content-Type: application/json" \
--H "Session-ID: 3e2db53f-1d40-4572-99a3-4a49728461dd"
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" | jq
 
 # 更新
-curl -X PUT http://localhost:4207/authed/admin/categories/7 \
+curl -X PUT http://localhost:4207/authed/admin/categories/4 \
 -H "Content-Type: application/json" \
--H "Session-ID: 3e2db53f-1d40-4572-99a3-4a49728461dd" \
+-H "Session-ID: 4f714410-a4df-4688-84c8-ba1fc483d2cc" \
 -d '{
-    "name": "スポーツ",
+    "name": "bottoms",
     "content": "",
     "status": "active",
-    "parent_id": 1
-}'
+    "parent_id": 2
+}' | jq
 
 # ユーザー関連
 # ユーザーの登録
@@ -165,7 +172,7 @@ curl -X POST http://localhost:4207/auth/user/register \
 -H "Content-Type: application/json" \
 -d '{
 	"name": "テスト太郎",
-	"email": "user@example.com",
+	"email": "user+003@example.com",
 	"password": "Password123"
 }'
 

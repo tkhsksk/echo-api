@@ -156,7 +156,7 @@ func GetCategoryByID(c echo.Context) error {
 	var category models.Category
 	result := db.DB.Preload("Admin").First(&category, id)
 	if err := result.Error; err != nil {
-		return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
+		return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4006]})
 	}
 
 	// 親カテゴリを辿る
@@ -216,10 +216,10 @@ func UpdateCategory(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"message": messages.Status[2000]})
 	}
 
-	// 親カテゴリーの存在チェック
+	// ParentIDが存在する時だけ親カテゴリーの存在チェック
 	var category_str models.Category
 	check := db.DB.First(&category_str, req.ParentID)
-	if check.RowsAffected == 0 {
+	if req.ParentID != nil && check.RowsAffected == 0 {
 	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4007]})
 	}
 
@@ -253,8 +253,23 @@ func UpdateCategory(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2005]})
 	}
 
+	// レスポンス構造体に詰める
+	response := responses.Category{
+		ID:       category.ID,
+		Name:     category.Name,
+		Status:   category.Status,
+		ParentID: category.ParentID,
+		Admin: responses.AdminSummary{
+			ID:     admin.ID,
+			Name:   admin.Name,
+			Status: admin.Status,
+		},
+		CreatedAt: category.CreatedAt,
+		UpdatedAt: category.UpdatedAt,
+	}
+
 	return c.JSON(http.StatusOK, echo.Map{
 		"message":  messages.Status[1002],
-		"category": category,
+		"category": response,
 	})
 }

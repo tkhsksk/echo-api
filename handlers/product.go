@@ -127,6 +127,35 @@ func GetProductsForAdmin(c echo.Context) error {
 	})
 }
 
+func GetProductsForAdminByCategory(c echo.Context) error {
+	// デフォルト 100 件 上限1000（DoS対策）
+	limit := utils.ParseLimitParam(c, 100, 1000)
+
+	// db接続
+	var products []models.Product
+	result := db.DB.
+		Preload("Category").
+		Preload("Admin").
+		Limit(limit).
+		Find(&products)
+	if err := result.Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": messages.Status[2004]})
+	}
+	if result.RowsAffected == 0 {
+	    return c.JSON(http.StatusNotFound, echo.Map{"message": messages.Status[4005]})
+	}
+
+	var response []responses.ProductForAdmin
+	for _, p := range products {
+		response = append(response, responses.NewProductForAdmin(p))
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message":  messages.Status[1005],
+		"products": response,
+	})
+}
+
 func GetProductForUserByID(c echo.Context) error {
 	id := c.Param("id")
 
